@@ -1,0 +1,6 @@
+/build/*
+!/build/.gitkeep
+!/include/.gitkeep
+!/lib/.gitkeep
+.vscode/*
+*/.vscode/*
