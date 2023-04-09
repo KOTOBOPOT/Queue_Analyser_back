@@ -6,11 +6,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(lib/Server)
+add_subdirectory(lib/Handlers)
 add_subdirectory(lib/ML)
 
 add_executable(${PROJECT_NAME}  src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} Server ML)
+target_link_libraries(${PROJECT_NAME} Server Handlers ML)
 
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
