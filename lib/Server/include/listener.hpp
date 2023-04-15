@@ -1,26 +1,10 @@
 #pragma once
-
 #include "session.hpp"
 #include "error.hpp"
-#include <boost/beast/core.hpp>
-#include <boost/beast/http.hpp>
-#include <boost/beast/version.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/config.hpp>
-#include <algorithm>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
+
 #include <memory>
 #include <string>
-#include <thread>
-#include <vector>
-#include <iostream>
-
-// namespace beast = boost::beast;         // from <boost/beast.hpp>
-// namespace http = beast::http;           // from <boost/beast/http.hpp>
-// namespace net = boost::asio;            // from <boost/asio.hpp>
-// using tcp = boost::asio::ip::tcp;   
+#include <boost/asio.hpp>
 
 // Accepts incoming connections and launches the sessions
 class listener : public std::enable_shared_from_this<listener>

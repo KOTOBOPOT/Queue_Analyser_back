@@ -2,10 +2,11 @@
 #pragma once
 #include "handler.hpp"
 #include "error.hpp"
-#include <boost/beast.hpp>
-#include <boost/asio.hpp>
+
 #include <iostream>
 #include <memory>
+#include <boost/beast.hpp>
+#include <boost/asio.hpp>
 
 // Handles an HTTP server connection
 class session : public std::enable_shared_from_this<session>

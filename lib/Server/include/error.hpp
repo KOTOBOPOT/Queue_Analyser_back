@@ -1,15 +1,6 @@
 #pragma once
-#include <boost/beast/core.hpp>
-#include <boost/beast/version.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/config.hpp>
-#include <string>
 #include <iostream>
-
-// namespace beast = boost::beast;         // from <boost/beast.hpp>
-// namespace http = beast::http;           // from <boost/beast/http.hpp>
-// namespace net = boost::asio;            // from <boost/asio.hpp>
-// using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+#include <boost/beast.hpp>
 
 // Report a failure
 void
