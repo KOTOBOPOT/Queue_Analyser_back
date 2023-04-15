@@ -4,6 +4,8 @@
 #include <iostream>
 #include <boost/beast.hpp>
 
+static int result = 0;
+
 // This function produces an HTTP response for the given
 // request. The type of the response object depends on the
 // contents of the request, so the interface requires the
@@ -54,16 +56,21 @@ void handle_request(
         return res;
     };
 
-
-
     // Handle the request
-    if(req.method() == boost::beast::http::verb::get && req.target() == "/getNumber")
+    if(req.method() == boost::beast::http::verb::get && req.target() == "/getCurrentValue")
     {
         boost::beast::http::response<boost::beast::http::string_body> res{boost::beast::http::status::ok, req.version()};
         res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(boost::beast::http::field::content_type, "text/html");
+        res.set(boost::beast::http::field::content_type, "text/plain");
+        res.set(boost::beast::http::field::access_control_allow_origin, "*");
         res.keep_alive(req.keep_alive());
-        res.body() = std::to_string(rand());
+        if (rand() % 2 || result == 0){
+            result += 5;
+        } else {
+            result -= 1;
+        }
+        result %= 25;
+        res.body() = std::to_string(result);
         res.prepare_payload();
         return send(std::move(res));
     }
@@ -71,7 +78,8 @@ void handle_request(
     {
         boost::beast::http::response<boost::beast::http::string_body> res{boost::beast::http::status::ok, req.version()};
         res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(boost::beast::http::field::content_type, "text/html");
+        res.set(boost::beast::http::field::content_type, "text/plain");
+        res.set(boost::beast::http::field::access_control_allow_origin, "*");
         res.keep_alive(req.keep_alive());
         res.body() = "111";
         res.prepare_payload();
