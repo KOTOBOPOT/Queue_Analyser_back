@@ -5,10 +5,11 @@
 
 class Server {
 public:
-    Server(const std::string& address = "127.0.0.1", 
-            unsigned short port = 8080, 
-            const std::string& doc_root = ".",
-            const int threads = 1)
+    Server(
+        const std::string& address = "127.0.0.1", 
+        unsigned short port = 8080, 
+        const std::string& doc_root = ".",
+        const int threads = 1)
         : address_(boost::asio::ip::make_address(address)),
           port_(port),
           doc_root_(std::make_shared<std::string>(doc_root)),

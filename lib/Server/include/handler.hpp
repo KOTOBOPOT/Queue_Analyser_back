@@ -11,12 +11,10 @@
 template<
     class Body, class Allocator,
     class Send>
-void
-handle_request(
+void handle_request(
     boost::beast::string_view doc_root,
     boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>>&& req,
-    Send&& send)
-{
+    Send&& send) {
     // Returns a bad request response
     auto const bad_request =
     [&req](boost::beast::string_view why)
@@ -59,7 +57,7 @@ handle_request(
 
 
     // Handle the request
-    if(req.method() == boost::beast::http::verb::get && req.target().find("/getNumber") == 0)
+    if(req.method() == boost::beast::http::verb::get && req.target() == "/getNumber")
     {
         boost::beast::http::response<boost::beast::http::string_body> res{boost::beast::http::status::ok, req.version()};
         res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
@@ -69,7 +67,7 @@ handle_request(
         res.prepare_payload();
         return send(std::move(res));
     }
-    else if(req.method() == boost::beast::http::verb::get && req.target().find("/getTotal") == 0)
+    else if(req.method() == boost::beast::http::verb::get && req.target() == "/getTotal")
     {
         boost::beast::http::response<boost::beast::http::string_body> res{boost::beast::http::status::ok, req.version()};
         res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
