@@ -3,11 +3,12 @@ aux_source_directory(src SERVER_SOURCES)
 
 # Задание цели
 # add_library(Server ${SERVER_SOURCES})
-add_library(Server src/request.cpp
-                    src/response.cpp                    
-                    src/router.cpp                    
-                    src/session.cpp                    
+add_library(Server  
                     src/server.cpp                    
+                    # src/router.cpp                    
+                    # src/session.cpp                    
+                    # src/server.cpp
+                    # src/handler.cpp                    
 )
 
 # Покдлючение всех hpp файлов в директории include/
