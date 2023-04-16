@@ -5,4 +5,4 @@
 
 void bot();
 
-#endif // QUEUE_ANALYSER_TG_BOT_BOT_H_
+#endif  // QUEUE_ANALYSER_TG_BOT_BOT_H_

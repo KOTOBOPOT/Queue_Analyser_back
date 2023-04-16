@@ -25,4 +25,4 @@ class Server {
   const int threads_ = 1;
 };
 
-#endif // QUEUE_ANALYSER_SERVER_SERVER_H_
+#endif  // QUEUE_ANALYSER_SERVER_SERVER_H_
