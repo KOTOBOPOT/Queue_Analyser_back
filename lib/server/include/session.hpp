@@ -1,5 +1,5 @@
-// Session.hpp
-#pragma once
+#ifndef QUEUE_ANALYSER_SERVER_SESSION_H_
+#define QUEUE_ANALYSER_SERVER_SESSION_H_
 #include "handler.hpp"
 #include "error.hpp"
 
@@ -80,3 +80,5 @@ public:
 
     void do_close();
 };
+
+#endif // QUEUE_ANALYSER_SERVER_SESSION_H_

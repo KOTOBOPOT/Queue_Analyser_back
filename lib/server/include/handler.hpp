@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUEUE_ANALYSER_SERVER_HANDLER_H_
+#define QUEUE_ANALYSER_SERVER_HANDLER_H_
 #include "error.hpp"
 
 #include <iostream>
@@ -149,3 +150,5 @@ void handle_request(
     res.keep_alive(req.keep_alive());
     return send(std::move(res));
 }
+
+#endif // QUEUE_ANALYSER_SERVER_HANDLER_H_

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUEUE_ANALYSER_SERVER_SERVER_H_
+#define QUEUE_ANALYSER_SERVER_SERVER_H_
 #include <boost/asio.hpp>
 #include <memory>
 #include <string>
@@ -23,3 +24,5 @@ class Server {
   const std::shared_ptr<std::string> doc_root_;
   const int threads_ = 1;
 };
+
+#endif // QUEUE_ANALYSER_SERVER_SERVER_H_

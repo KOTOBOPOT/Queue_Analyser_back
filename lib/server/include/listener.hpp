@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUEUE_ANALYSER_SERVER_LISTENER_H_
+#define QUEUE_ANALYSER_SERVER_LISTENER_H_
 #include "session.hpp"
 #include "error.hpp"
 
@@ -29,3 +30,5 @@ private:
 
     void on_accept(boost::beast::error_code ec, boost::asio::ip::tcp::socket socket);
 };
+
+#endif // QUEUE_ANALYSER_SERVER_LISTENER_H_
