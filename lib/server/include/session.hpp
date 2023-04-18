@@ -36,7 +36,7 @@ class Session : public std::enable_shared_from_this<Session> {
       boost::beast::http::async_write(
           self_.stream_, *sp,
           boost::beast::bind_front_handler(
-              &Session::on_write, self_.shared_from_this(), sp->need_eof()));
+              &Session::onWrite, self_.shared_from_this(), sp->need_eof()));
     }
   };
 
@@ -57,23 +57,23 @@ class Session : public std::enable_shared_from_this<Session> {
       : stream_(std::move(socket)), doc_root_(doc_root), lambda_(*this) {}
 
   // Start the asynchronous operation
-  void run() { do_read(); }
+  void run() { doRead(); }
 
   // будет запускаться в начале работы каждого запроса и будет асинхронно
   // считывать данные из потока
-  void do_read();
+  void doRead();
 
   // будет вызываться при завершении чтения из потока и будет обрабатывать
   // полученный запрос
-  void on_read(boost::beast::error_code ec, std::size_t bytes_transferred);
+  void onRead(boost::beast::error_code ec, std::size_t bytes_transferred);
 
   // будет вызываться после того, как будет сформирован и отправлен ответ
   // клиенту
-  void on_write(bool close, boost::beast::error_code ec,
+  void onWrite(bool close, boost::beast::error_code ec,
                 std::size_t bytes_transferred);
 
   // зыкрытие сессии и освобождение ресурсов
-  void do_close();
+  void doClose();
 };
 
 #endif  // QUEUE_ANALYSER_SERVER_SESSION_H_

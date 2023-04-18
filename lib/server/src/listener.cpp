@@ -35,14 +35,14 @@ Listener::Listener(boost::asio::io_context& ioc,
   }
 }
 
-void Listener::do_accept() {
+void Listener::doAccept() {
   // Прием нового соединения
   acceptor_.async_accept(boost::asio::make_strand(ioc_),
-                         boost::beast::bind_front_handler(&Listener::on_accept,
+                         boost::beast::bind_front_handler(&Listener::onAccept,
                                                           shared_from_this()));
 }
 
-void Listener::on_accept(boost::beast::error_code ec,
+void Listener::onAccept(boost::beast::error_code ec,
                          boost::asio::ip::tcp::socket socket) {
   if (ec) {
     fail(ec, "accept");
@@ -55,5 +55,5 @@ void Listener::on_accept(boost::beast::error_code ec,
   }
 
   // Accept another connection
-  do_accept();
+  doAccept();
 }

@@ -5,6 +5,8 @@ void fail(boost::beast::error_code ec, char const* what) {
 }
 
 boost::beast::string_view mime_type(boost::beast::string_view path) {
+  std::cout << "mime_type PRINTING\n";
+
   using boost::beast::iequals;
   auto const ext = [&path] {
     auto const pos = path.rfind(".");
@@ -38,6 +40,8 @@ boost::beast::string_view mime_type(boost::beast::string_view path) {
 
 std::string path_cat(boost::beast::string_view base,
                      boost::beast::string_view path) {
+
+  std::cout << "PATH CAT PRINTING\n";
   if (base.empty()) return std::string(path);
   std::string result(base);
 #ifdef BOOST_MSVC

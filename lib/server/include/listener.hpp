@@ -15,16 +15,16 @@ class Listener : public std::enable_shared_from_this<Listener> {
            std::shared_ptr<std::string const> const& doc_root);
 
   // Start accepting incoming connections
-  void run() { do_accept(); }
+  void run() { doAccept(); }
 
  private:
   boost::asio::io_context& ioc_;
   boost::asio::ip::tcp::acceptor acceptor_;
   std::shared_ptr<std::string const> doc_root_;
   
-  void do_accept();
+  void doAccept();
 
-  void on_accept(boost::beast::error_code ec,
+  void onAccept(boost::beast::error_code ec,
                  boost::asio::ip::tcp::socket socket);
 };
 

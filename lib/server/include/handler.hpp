@@ -12,7 +12,7 @@ static int result = 0;
 // contents of the request, so the interface requires the
 // caller to pass a generic lambda for receiving the response.
 template <class Body, class Allocator, class Send>
-void handle_request(
+void handleRequest(
     boost::beast::string_view doc_root,
     boost::beast::http::request<
         Body, boost::beast::http::basic_fields<Allocator>>&& req,
