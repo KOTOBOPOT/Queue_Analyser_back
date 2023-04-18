@@ -9,10 +9,6 @@
 
 // Accepts incoming connections and launches the sessions
 class Listener : public std::enable_shared_from_this<Listener> {
-  boost::asio::io_context& ioc_;
-  boost::asio::ip::tcp::acceptor acceptor_;
-  std::shared_ptr<std::string const> doc_root_;
-
  public:
   Listener(boost::asio::io_context& ioc,
            boost::asio::ip::tcp::endpoint endpoint,
@@ -22,6 +18,10 @@ class Listener : public std::enable_shared_from_this<Listener> {
   void run() { do_accept(); }
 
  private:
+  boost::asio::io_context& ioc_;
+  boost::asio::ip::tcp::acceptor acceptor_;
+  std::shared_ptr<std::string const> doc_root_;
+  
   void do_accept();
 
   void on_accept(boost::beast::error_code ec,

@@ -8,7 +8,9 @@
 #include "error.hpp"
 #include "handler.hpp"
 
-// Handles an HTTP server connection
+// обрабатывает входящее соединение. Он должен обеспечивать
+// чтение запроса, парсинг запроса,
+// обработку запроса и отправку ответа
 class Session : public std::enable_shared_from_this<Session> {
   // This is the C++11 equivalent of a generic lambda.
   // The function object is used to send an HTTP message.
@@ -38,8 +40,11 @@ class Session : public std::enable_shared_from_this<Session> {
     }
   };
 
+  //  объект tcp_stream, через который происходит взаимодействие с клиентом
   boost::beast::tcp_stream stream_;
+  // буфер для чтения и записи запроса/ответа
   boost::beast::flat_buffer buffer_;
+  // указатель на корневой каталог сервера.
   std::shared_ptr<std::string const> doc_root_;
   boost::beast::http::request<boost::beast::http::string_body> req_;
   std::shared_ptr<void> res_;
@@ -54,13 +59,20 @@ class Session : public std::enable_shared_from_this<Session> {
   // Start the asynchronous operation
   void run() { do_read(); }
 
+  // будет запускаться в начале работы каждого запроса и будет асинхронно
+  // считывать данные из потока
   void do_read();
 
+  // будет вызываться при завершении чтения из потока и будет обрабатывать
+  // полученный запрос
   void on_read(boost::beast::error_code ec, std::size_t bytes_transferred);
 
+  // будет вызываться после того, как будет сформирован и отправлен ответ
+  // клиенту
   void on_write(bool close, boost::beast::error_code ec,
                 std::size_t bytes_transferred);
 
+  // зыкрытие сессии и освобождение ресурсов
   void do_close();
 };
 

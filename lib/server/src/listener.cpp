@@ -36,7 +36,7 @@ Listener::Listener(boost::asio::io_context& ioc,
 }
 
 void Listener::do_accept() {
-  // The new connection gets its own strand
+  // Прием нового соединения
   acceptor_.async_accept(boost::asio::make_strand(ioc_),
                          boost::beast::bind_front_handler(&Listener::on_accept,
                                                           shared_from_this()));
@@ -47,8 +47,11 @@ void Listener::on_accept(boost::beast::error_code ec,
   if (ec) {
     fail(ec, "accept");
   } else {
-    // Create the session and run it
-    std::make_shared<Session>(std::move(socket), doc_root_)->run();
+    // Создание объекта Session и передача ему принятого сокета
+    auto session = std::make_shared<Session>(std::move(socket), doc_root_);
+
+    // Запуск обработки соединения в отдельном потоке
+    session->run();
   }
 
   // Accept another connection
