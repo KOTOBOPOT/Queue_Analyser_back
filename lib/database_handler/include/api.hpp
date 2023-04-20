@@ -1,0 +1,7 @@
+#ifndef QUEUE_ANALYSER_DATABASE_HANDLER_API_H_
+#define QUEUE_ANALYSER_DATABASE_HANDLER_API_H_
+#include <iostream>
+
+void database_handler();
+
+#endif  // QUEUE_ANALYSER_DATABASE_HANDLER_API_H_
