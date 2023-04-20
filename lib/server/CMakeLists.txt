@@ -7,11 +7,8 @@ add_library(server
                     src/error.cpp                    
                     src/session.cpp                    
                     src/listener.cpp                    
+                    src/router.cpp                    
                     src/server.cpp                    
-                    # src/router.cpp                    
-                    # src/session.cpp                    
-                    # src/server.cpp
-                    # src/handler.cpp                    
 )
 
 # Покдлючение всех hpp файлов в директории include/

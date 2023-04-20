@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUEUE_ANALYSER_SERVER_ROUTE_H_
+#define QUEUE_ANALYSER_SERVER_ROUTE_H_
 #include <functional>
 #include <string>
 
@@ -11,16 +12,18 @@ class Route {
       boost::beast::http::string_body>(const Request& req)>;
 
   Route(std::string method, std::string path, Handler handler)
-      : method_(std::move(method)), path_(std::move(path)) {
-    handler_ = std::make_unique<Handler>(std::move(handler));
-  }
+      : method_(std::move(method)),
+        path_(std::move(path)),
+        handler_(std::move(handler)) {}
 
   const std::string& method() const { return method_; }
   const std::string& path() const { return path_; }
-  const Handler& handler() const { return *handler_; }
+  const Handler& handler() const { return handler_; }
 
  private:
   std::string method_;
   std::string path_;
-  std::unique_ptr<Handler> handler_;
+  Handler handler_;
 };
+
+#endif  // QUEUE_ANALYSER_SERVER_ROUTE_H_
