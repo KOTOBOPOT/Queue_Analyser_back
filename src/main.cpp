@@ -3,7 +3,7 @@
 
 #include "api.hpp"
 #include "bot.hpp"
-#include "generateResponse.hpp"
+#include "generate_response.hpp"
 #include "model.hpp"
 #include "router.hpp"
 #include "server.hpp"
