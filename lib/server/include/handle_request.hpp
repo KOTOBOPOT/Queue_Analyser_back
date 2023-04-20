@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "error.hpp"
+#include "router.hpp"
 
 static int result = 0;
 
@@ -12,11 +13,10 @@ static int result = 0;
 // contents of the request, so the interface requires the
 // caller to pass a generic lambda for receiving the response.
 template <class Body, class Allocator, class Send>
-void handleRequest(
-    boost::beast::string_view doc_root,
-    boost::beast::http::request<
-        Body, boost::beast::http::basic_fields<Allocator>>&& req,
-    Send&& send) {
+void handleRequest(Router& router, boost::beast::string_view doc_root,
+                   boost::beast::http::request<
+                       Body, boost::beast::http::basic_fields<Allocator>>&& req,
+                   Send&& send) {
   // Returns a bad request response
   auto const bad_request = [&req](boost::beast::string_view why) {
     boost::beast::http::response<boost::beast::http::string_body> res{
@@ -54,40 +54,45 @@ void handleRequest(
   };
 
   // Handle the request
-  if (req.method() == boost::beast::http::verb::get &&
-      req.target() == "/getCurrentValue") {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::ok, req.version()};
-    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(boost::beast::http::field::content_type, "text/plain");
-    res.set(boost::beast::http::field::access_control_allow_origin, "*");
-    res.keep_alive(req.keep_alive());
-    if (rand() % 2 || result == 0) {
-      result += 5;
-    } else {
-      result -= 1;
-    }
-    result %= 25;
-    res.body() = std::to_string(result);
-    res.prepare_payload();
-    return send(std::move(res));
-  } else if (req.method() == boost::beast::http::verb::get &&
-             req.target() == "/getTotal") {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::ok, req.version()};
-    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(boost::beast::http::field::content_type, "text/plain");
-    res.set(boost::beast::http::field::access_control_allow_origin, "*");
-    res.keep_alive(req.keep_alive());
-    res.body() = "111";
-    res.prepare_payload();
-    return send(std::move(res));
-  } else if (req.method() != boost::beast::http::verb::get &&
-             req.method() != boost::beast::http::verb::head) {
-    // We return responses indicating an error if
-    // we do not recognize the request method.
-    auto const response = bad_request("Unknown HTTP-method");
-    return send(bad_request("Unknown HTTP-method"));
+  // if (req.method() == boost::beast::http::verb::get &&
+  //     req.target() == "/getCurrentValue") {
+  //   boost::beast::http::response<boost::beast::http::string_body> res{
+  //       boost::beast::http::status::ok, req.version()};
+  //   res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+  //   res.set(boost::beast::http::field::content_type, "text/plain");
+  //   res.set(boost::beast::http::field::access_control_allow_origin, "*");
+  //   res.keep_alive(req.keep_alive());
+  //   if (rand() % 2 || result == 0) {
+  //     result += 5;
+  //   } else {
+  //     result -= 1;
+  //   }
+  //   result %= 25;
+  //   res.body() = std::to_string(result);
+  //   res.prepare_payload();
+  //   return send(std::move(res));
+  // } else if (req.method() == boost::beast::http::verb::get &&
+  //            req.target() == "/getTotal") {
+  //   boost::beast::http::response<boost::beast::http::string_body> res{
+  //       boost::beast::http::status::ok, req.version()};
+  //   res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+  //   res.set(boost::beast::http::field::content_type, "text/plain");
+  //   res.set(boost::beast::http::field::access_control_allow_origin, "*");
+  //   res.keep_alive(req.keep_alive());
+  //   res.body() = "111";
+  //   res.prepare_payload();
+  //   return send(std::move(res));
+  // } else if (req.method() != boost::beast::http::verb::get &&
+  //            req.method() != boost::beast::http::verb::head) {
+  //   // We return responses indicating an error if
+  //   // we do not recognize the request method.
+  //   auto const response = bad_request("Unknown HTTP-method");
+  //   return send(bad_request("Unknown HTTP-method"));
+  // }
+  auto handle = router.findHandler(req);
+  if (handle.has_value()) {
+    boost::beast::http::response<boost::beast::http::string_body> response = handle.value()(req);
+    return send(std::move(response));
   }
 
   // Make sure we can handle the method

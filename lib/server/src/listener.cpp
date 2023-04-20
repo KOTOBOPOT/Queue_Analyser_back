@@ -1,9 +1,12 @@
 #include "listener.hpp"
 
-Listener::Listener(boost::asio::io_context& ioc,
+Listener::Listener(Router& router, boost::asio::io_context& ioc,
                    boost::asio::ip::tcp::endpoint endpoint,
                    std::shared_ptr<std::string const> const& doc_root)
-    : ioc_(ioc), acceptor_(boost::asio::make_strand(ioc)), doc_root_(doc_root) {
+    : router_(router),
+      ioc_(ioc),
+      acceptor_(boost::asio::make_strand(ioc)),
+      doc_root_(doc_root) {
   boost::beast::error_code ec;
 
   // Open the acceptor
@@ -43,12 +46,12 @@ void Listener::doAccept() {
 }
 
 void Listener::onAccept(boost::beast::error_code ec,
-                         boost::asio::ip::tcp::socket socket) {
+                        boost::asio::ip::tcp::socket socket) {
   if (ec) {
     fail(ec, "accept");
   } else {
     // Создание объекта Session и передача ему принятого сокета
-    auto session = std::make_shared<Session>(std::move(socket), doc_root_);
+    auto session = std::make_shared<Session>(router_, std::move(socket), doc_root_);
 
     // Запуск обработки соединения в отдельном потоке
     session->run();

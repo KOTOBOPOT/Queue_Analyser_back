@@ -27,7 +27,8 @@ void Session::onRead(boost::beast::error_code ec,
   if (ec) return fail(ec, "read");
 
   // Send the response
-  handleRequest(*doc_root_, std::move(req_), lambda_);
+  handleRequest(router_, *doc_root_, std::move(req_), lambda_);
+  
 }
 
 void Session::onWrite(bool close, boost::beast::error_code ec,

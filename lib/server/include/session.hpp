@@ -6,7 +6,8 @@
 #include <memory>
 
 #include "error.hpp"
-#include "handler.hpp"
+#include "handle_request.hpp"
+#include "router.hpp"
 
 // обрабатывает входящее соединение. Он должен обеспечивать
 // чтение запроса, парсинг запроса,
@@ -40,6 +41,7 @@ class Session : public std::enable_shared_from_this<Session> {
     }
   };
 
+  Router& router_;
   //  объект tcp_stream, через который происходит взаимодействие с клиентом
   boost::beast::tcp_stream stream_;
   // буфер для чтения и записи запроса/ответа
@@ -52,9 +54,12 @@ class Session : public std::enable_shared_from_this<Session> {
 
  public:
   // Take ownership of the stream
-  Session(boost::asio::ip::tcp::socket&& socket,
+  Session(Router& router, boost::asio::ip::tcp::socket&& socket,
           std::shared_ptr<std::string const> const& doc_root)
-      : stream_(std::move(socket)), doc_root_(doc_root), lambda_(*this) {}
+      : router_(router),
+        stream_(std::move(socket)),
+        doc_root_(doc_root),
+        lambda_(*this) {}
 
   // Start the asynchronous operation
   void run() { doRead(); }
@@ -70,7 +75,7 @@ class Session : public std::enable_shared_from_this<Session> {
   // будет вызываться после того, как будет сформирован и отправлен ответ
   // клиенту
   void onWrite(bool close, boost::beast::error_code ec,
-                std::size_t bytes_transferred);
+               std::size_t bytes_transferred);
 
   // зыкрытие сессии и освобождение ресурсов
   void doClose();
