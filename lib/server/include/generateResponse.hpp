@@ -6,9 +6,8 @@ using Response = Route::Response;
 using Request = Route::Request;
 
 struct StringResponse : public std::string {
-  static const char* contentType;
+  static constexpr const char* contentType = "text/plain";
 };
-const char* StringResponse::contentType = "text/plain";
 
 template<typename T>
 Response generateResponse(const Request& req, const T& content) {

@@ -3,10 +3,10 @@
 
 #include "api.hpp"
 #include "bot.hpp"
+#include "generateResponse.hpp"
 #include "model.hpp"
 #include "router.hpp"
 #include "server.hpp"
-#include "generateResponse.hpp"
 // #include "database_handler/api.hpp"  // ?
 using Response = Route::Response;
 using Request = Route::Request;
@@ -25,7 +25,18 @@ int main(int argc, char* argv[]) {
       result -= 1;
     }
     result %= 25;
-    return generateResponse<StringResponse>(req, StringResponse{std::to_string(result)});
+    return generateResponse<StringResponse>(
+        req, StringResponse{std::to_string(result)});
+  });
+
+  rt.addHandler("GET", "/getTen", [](const Request& req) {
+    return generateResponse<StringResponse>(req,
+                                            StringResponse{"getTen query 10"});
+  });
+
+  rt.addHandler("POST", "/getTwo", [](const Request& req) {
+    return generateResponse<StringResponse>(req,
+                                            StringResponse{"getTwo query 2"});
   });
 
   Server tst(rt);
