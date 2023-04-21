@@ -1,8 +1,8 @@
-#include "server.hpp"
+#include "server.h"
 
 #include <boost/asio.hpp>
 
-#include "listener.hpp"
+#include "listener.h"
 
 void Server::run() {
   boost::asio::io_context ioc_{threads_};

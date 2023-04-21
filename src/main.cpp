@@ -3,10 +3,10 @@
 
 #include "api.hpp"
 #include "bot.hpp"
-#include "generate_response.hpp"
+#include "generate_response.h"
 #include "model.hpp"
-#include "router.hpp"
-#include "server.hpp"
+#include "router.h"
+#include "server.h"
 // #include "database_handler/api.hpp"  // ?
 using Response = Route::Response;
 using Request = Route::Request;

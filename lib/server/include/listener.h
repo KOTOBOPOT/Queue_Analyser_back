@@ -4,9 +4,9 @@
 #include <memory>
 #include <string>
 
-#include "error.hpp"
-#include "router.hpp"
-#include "session.hpp"
+#include "error.h"
+#include "router.h"
+#include "session.h"
 
 // Accepts incoming connections and launches the sessions
 class Listener : public std::enable_shared_from_this<Listener> {

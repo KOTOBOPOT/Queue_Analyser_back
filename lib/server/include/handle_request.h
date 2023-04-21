@@ -3,8 +3,8 @@
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "error.hpp"
-#include "router.hpp"
+#include "error.h"
+#include "router.h"
 
 static int result = 0;
 

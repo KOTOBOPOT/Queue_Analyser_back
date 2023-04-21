@@ -1,6 +1,6 @@
 #ifndef QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
 #define QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
-#include "route.hpp"
+#include "route.h"
 
 using Response = Route::Response;
 using Request = Route::Request;
