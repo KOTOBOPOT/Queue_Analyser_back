@@ -1,10 +1,7 @@
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "api.hpp"
-#include "bot.hpp"
 #include "generate_response.h"
-#include "model.hpp"
 #include "router.h"
 #include "server.h"
 // #include "database_handler/api.hpp"  // ?
@@ -12,10 +9,6 @@ using Response = Router::Response;
 using Request = Router::Request;
 
 int main(int argc, char* argv[]) {
-  database_handler();
-  bot();
-  model();
-
   Router rt;
   rt.addHandler("GET", "/getCurrentValue", [](const Request& req) -> Response {
     static int result = 0;
