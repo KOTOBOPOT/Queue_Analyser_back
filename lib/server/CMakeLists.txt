@@ -4,6 +4,7 @@ aux_source_directory(src SERVER_SOURCES)
 # Задание цели
 # add_library(Server ${SERVER_SOURCES})
 add_library(server  
+                    src/types.cpp                    
                     src/error.cpp                    
                     src/session.cpp                    
                     src/listener.cpp                    

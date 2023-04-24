@@ -5,9 +5,8 @@
 #include <iostream>
 #include <memory>
 
-#include "error.hpp"
-#include "handle_request.hpp"
-#include "router.hpp"
+#include "handle_request.h"
+#include "router.h"
 
 // обрабатывает входящее соединение. Он должен обеспечивать
 // чтение запроса, парсинг запроса,

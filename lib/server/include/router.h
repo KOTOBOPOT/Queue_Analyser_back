@@ -5,10 +5,24 @@
 #include <optional>
 #include <vector>
 
-#include "route.hpp"
-
 class Router {
  public:
+  using Request = boost::beast::http::request<boost::beast::http::string_body>;
+  using Response =
+      boost::beast::http::response<boost::beast::http::string_body>;
+  using Handler = std::function<boost::beast::http::response<
+      boost::beast::http::string_body>(const Request& req)>;
+  struct Route {
+    Route(std::string&& _method, std::string&& _path, Handler&& _handler)
+      : method(std::move(_method)),
+        path(std::move(_path)),
+        handler(std::move(_handler)) {}
+
+    std::string method;
+    std::string path;
+    Handler handler;
+  };
+
   Router() = default;
 
   // move constructor
@@ -21,12 +35,12 @@ class Router {
   }
 
   void addHandler(std::string method, std::string path,
-                  Route::Handler handler) {
+                  Handler handler) {
     routes_.emplace_back(std::move(method), std::move(path),
                          std::move(handler));
   }
 
-  std::optional<Route::Handler> findHandler(const Route::Request& req) const;
+  std::optional<Handler> findHandler(const Request& req) const;
 
  private:
   std::vector<Route> routes_;
