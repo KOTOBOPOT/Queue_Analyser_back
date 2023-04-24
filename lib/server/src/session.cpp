@@ -1,4 +1,5 @@
 #include "session.h"
+#include "error.h"
 
 void Session::doRead() {
   // Make the request empty before reading,

@@ -3,7 +3,7 @@
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "error.h"
+#include "types.h"
 #include "generate_response.h"
 #include "router.h"
 

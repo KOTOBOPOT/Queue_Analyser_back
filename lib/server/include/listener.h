@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 
-#include "error.h"
 #include "router.h"
 #include "session.h"
 

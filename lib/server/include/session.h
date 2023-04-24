@@ -5,7 +5,6 @@
 #include <iostream>
 #include <memory>
 
-#include "error.h"
 #include "handle_request.h"
 #include "router.h"
 
