@@ -4,15 +4,15 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#include "../include/sqlite_handler.h"
-#include "../include/database_exceptions/db_access_exc.h"
-#include "../include/database_exceptions/query_execution_exc.h"
-#include "../include/database_exceptions/query_preparation_exc.h"
 #include <sqlite3.h>
 #include <string>
 #include <vector>
 #include <chrono>
 #include <ctime>
+#include "../include/sqlite_handler.h"
+#include "../include/database_exceptions/db_access_exc.h"
+#include "../include/database_exceptions/query_execution_exc.h"
+#include "../include/database_exceptions/query_preparation_exc.h"
 
 /**
  * @throws DBAccessException Вызывается, если не удается открыть указанынй файл

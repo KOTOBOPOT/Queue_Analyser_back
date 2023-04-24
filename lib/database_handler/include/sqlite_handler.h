@@ -4,14 +4,14 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#ifndef LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
-#define LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
+#ifndef QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
+#define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
 
-#include "i_data_source.h"
 #include <sqlite3.h>
 #include <vector>
 #include <string>
 #include <chrono>
+#include "i_data_source.h"
 
 using time_point = std::chrono::system_clock::time_point;
 
@@ -33,4 +33,4 @@ class SQLiteHandler final : public IDataSource {
   sqlite3* db_{};
 };
 
-#endif //LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
+#endif //QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_

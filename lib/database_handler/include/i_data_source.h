@@ -4,8 +4,8 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#ifndef LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
-#define LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
+#ifndef QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
+#define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
 
 #include <chrono>
 #include <string>
@@ -20,19 +20,4 @@ class IDataSource {
   virtual void insertEntry(int measurement, time_point time, int room_id) = 0;
 };
 
-class Server {
- public:
-  Server(const std::vector<std::string> &x,
-         const std::string par_name,
-         const std::string excessively_alt_name,
-         const std::vector<std::string> &,
-         const std::string par_surname) : name(par_name),
-                                          surname(par_surname),
-                                          completely_unneccessarily_long_alt_name(excessively_alt_name) {}
- private:
-  std::string name;
-  std::string surname;
-  std::string completely_unneccessarily_long_alt_name;
-};
-
-#endif //LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
+#endif //QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
