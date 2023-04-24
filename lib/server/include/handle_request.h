@@ -40,6 +40,7 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
     return send(std::move(response));
   }
 
+  // Try to find File handler for request
   // Build the path to the requested file
   std::string path = path_cat(doc_root, req.target());
   if (req.target().back() == '/') {

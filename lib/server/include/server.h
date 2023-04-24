@@ -23,7 +23,7 @@ class Server {
   Router& router_;
   const boost::asio::ip::address address_;
   const unsigned short port_;
-  const std::shared_ptr<std::string> doc_root_;
+  const std::shared_ptr<std::string const> doc_root_;
   const int threads_ = 1;
 };
 
