@@ -5,7 +5,6 @@
 
 #include "error.h"
 #include "generate_response.h"
-#include "route.h"
 #include "router.h"
 
 static int result = 0;
@@ -19,13 +18,13 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
                    boost::beast::http::request<
                        Body, boost::beast::http::basic_fields<Allocator>>&& req,
                    Send&& send) {
-  // Make sure we can handle the method
-  // Returns a bad request response
+  // Check that the request method is supported
   if (req.method() != boost::beast::http::verb::get &&
-      req.method() != boost::beast::http::verb::head)
+      req.method() != boost::beast::http::verb::head) {
     return send(generateResponse<StringResponse>(
         req, StringResponse{"Unknown HTTP-method"},
         boost::beast::http::status::bad_request));
+  }
 
   // Request path must be absolute and not contain "..".
   if (req.target().empty() || req.target()[0] != '/' ||
@@ -37,34 +36,36 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
   // Try find handler for request
   auto handle = router.findHandler(req);
   if (handle.has_value()) {
-    Route::Response response = handle.value()(req);
+    Router::Response response = handle.value()(req);
     return send(std::move(response));
   }
 
   // Build the path to the requested file
   std::string path = path_cat(doc_root, req.target());
-  if (req.target().back() == '/') path.append("index.html");
+  if (req.target().back() == '/') {
+    path.append("index.html");
+  }
 
   // Attempt to open the file
   boost::beast::error_code ec;
   boost::beast::http::file_body::value_type body;
   body.open(path.c_str(), boost::beast::file_mode::scan, ec);
-
   // Handle the case where the file doesn't exist
   // Returns a not found response
-  if (ec == boost::beast::errc::no_such_file_or_directory)
-    return send(generateResponse<StringResponse>(
-        req,
-        StringResponse{"The resource '" + std::string(req.target()) +
-                       "' was not found."},
-        boost::beast::http::status::internal_server_error));
-
-  // Handle an unknown error
-  // Returns a not found response
-  if (ec)
-    return send(generateResponse<StringResponse>(
-        req, StringResponse{std::string(ec.message())},
-        boost::beast::http::status::internal_server_error));
+  if (ec) {
+    if (ec == boost::beast::errc::no_such_file_or_directory ||
+        ec == boost::beast::errc::not_a_directory) {
+      return send(generateResponse<StringResponse>(
+          req,
+          StringResponse{"The resource '" + std::string(req.target()) +
+                         "' was not found."},
+          boost::beast::http::status::not_found));
+    } else {
+      return send(generateResponse<StringResponse>(
+          req, StringResponse{std::string(ec.message())},
+          boost::beast::http::status::internal_server_error));
+    }
+  }
 
   // Cache the size since we need it after the move
   auto const size = body.size();

@@ -8,8 +8,8 @@
 #include "router.h"
 #include "server.h"
 // #include "database_handler/api.hpp"  // ?
-using Response = Route::Response;
-using Request = Route::Request;
+using Response = Router::Response;
+using Request = Router::Request;
 
 int main(int argc, char* argv[]) {
   database_handler();

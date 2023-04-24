@@ -1,9 +1,9 @@
 #ifndef QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
 #define QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
-#include "route.h"
+#include "router.h"
 
-using Response = Route::Response;
-using Request = Route::Request;
+using Response = Router::Response;
+using Request = Router::Request;
 
 struct StringResponse : public std::string {
   static constexpr const char* contentType = "text/plain";
