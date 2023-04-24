@@ -4,6 +4,8 @@
 #include <iostream>
 
 #include "error.h"
+#include "generate_response.h"
+#include "route.h"
 #include "router.h"
 
 static int result = 0;
@@ -17,58 +19,27 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
                    boost::beast::http::request<
                        Body, boost::beast::http::basic_fields<Allocator>>&& req,
                    Send&& send) {
-  // Returns a bad request response
-  auto const bad_request = [&req](boost::beast::string_view why) {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::bad_request, req.version()};
-    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(boost::beast::http::field::content_type, "text/html");
-    res.keep_alive(req.keep_alive());
-    res.body() = std::to_string(rand() % 9);
-    res.prepare_payload();
-    return res;
-  };
-
-  // Returns a not found response
-  auto const not_found = [&req](boost::beast::string_view target) {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::not_found, req.version()};
-    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(boost::beast::http::field::content_type, "text/html");
-    res.keep_alive(req.keep_alive());
-    res.body() = "The resource '" + std::string(target) + "' was not found.";
-    res.prepare_payload();
-    return res;
-  };
-
-  // Returns a server error response
-  auto const server_error = [&req](boost::beast::string_view what) {
-    boost::beast::http::response<boost::beast::http::string_body> res{
-        boost::beast::http::status::internal_server_error, req.version()};
-    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(boost::beast::http::field::content_type, "text/html");
-    res.keep_alive(req.keep_alive());
-    res.body() = "An error occurred: '" + std::string(what) + "'";
-    res.prepare_payload();
-    return res;
-  };
-
-  // Try find handler for request
-  auto handle = router.findHandler(req);
-  if (handle.has_value()) {
-    boost::beast::http::response<boost::beast::http::string_body> response = handle.value()(req);
-    return send(std::move(response));
-  }
-
   // Make sure we can handle the method
+  // Returns a bad request response
   if (req.method() != boost::beast::http::verb::get &&
       req.method() != boost::beast::http::verb::head)
-    return send(bad_request("Unknown HTTP-method"));
+    return send(generateResponse<StringResponse>(
+        req, StringResponse{"Unknown HTTP-method"},
+        boost::beast::http::status::bad_request));
 
   // Request path must be absolute and not contain "..".
   if (req.target().empty() || req.target()[0] != '/' ||
       req.target().find("..") != boost::beast::string_view::npos)
-    return send(bad_request("Illegal request-target"));
+    return send(generateResponse<StringResponse>(
+        req, StringResponse{"Illegal request-target"},
+        boost::beast::http::status::bad_request));
+
+  // Try find handler for request
+  auto handle = router.findHandler(req);
+  if (handle.has_value()) {
+    Route::Response response = handle.value()(req);
+    return send(std::move(response));
+  }
 
   // Build the path to the requested file
   std::string path = path_cat(doc_root, req.target());
@@ -80,11 +51,20 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
   body.open(path.c_str(), boost::beast::file_mode::scan, ec);
 
   // Handle the case where the file doesn't exist
+  // Returns a not found response
   if (ec == boost::beast::errc::no_such_file_or_directory)
-    return send(not_found(req.target()));
+    return send(generateResponse<StringResponse>(
+        req,
+        StringResponse{"The resource '" + std::string(req.target()) +
+                       "' was not found."},
+        boost::beast::http::status::internal_server_error));
 
   // Handle an unknown error
-  if (ec) return send(server_error(ec.message()));
+  // Returns a not found response
+  if (ec)
+    return send(generateResponse<StringResponse>(
+        req, StringResponse{std::string(ec.message())},
+        boost::beast::http::status::internal_server_error));
 
   // Cache the size since we need it after the move
   auto const size = body.size();
