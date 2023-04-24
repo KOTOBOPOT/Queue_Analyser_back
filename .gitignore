@@ -15,6 +15,7 @@
 ### C++ ###
 # Prerequisites
 *.d
+sqlite-autoconf*
 
 # Compiled Object files
 *.slo
