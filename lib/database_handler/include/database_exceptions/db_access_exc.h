@@ -4,16 +4,14 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#pragma once
-#include <string>
-#include <exception>
+#ifndef LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_DB_ACCESS_EXC_H_
+#define LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_DB_ACCESS_EXC_H_
 
- class DBAccessException : public std::exception {
- public:
-   explicit DBAccessException(std::string&& msg) : msg_(std::move(msg)) {};
-  const char * what() const noexcept override {
-    return msg_.c_str();
-  }
- private:
-  std::string msg_;
-};
+#include "db_base_exception.h"
+
+ class DBAccessException : public DBBaseException {
+  public:
+   explicit DBAccessException(std::string &&msg) : DBBaseException(std::move(msg)) {};
+ };
+
+#endif //LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_DB_ACCESS_EXC_H_

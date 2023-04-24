@@ -4,7 +4,9 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#pragma once
+#ifndef LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
+#define LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_
+
 #include <chrono>
 #include <string>
 #include <vector>
@@ -32,3 +34,5 @@ class Server {
   std::string surname;
   std::string completely_unneccessarily_long_alt_name;
 };
+
+#endif //LIB_DATABASE_HANDLER_INCLUDE_I_DATA_SOURCE_H_

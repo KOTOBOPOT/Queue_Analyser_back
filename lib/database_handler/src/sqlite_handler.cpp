@@ -18,16 +18,16 @@
  * @throws DBAccessException Вызывается, если не удается открыть указанынй файл
  * @param db_path Строка, содержащая путь к существующему файлу .db (Если файла не существует, будет создан новый, однако настраивать БД придется отдельно)
  */
-SQLiteHandler::SQLiteHandler(const std::string& db_path) : db(nullptr) {
-  int rc = sqlite3_open(db_path.c_str(), &db);
+SQLiteHandler::SQLiteHandler(const std::string& db_path) : db_(nullptr) {
+  int rc = sqlite3_open(db_path.c_str(), &db_);
   if (rc) {
-    sqlite3_close(db);
-    throw DBAccessException("Cannot connect to database: " + std::string(sqlite3_errmsg(db)));
+    sqlite3_close(db_);
+    throw DBAccessException("Cannot connect to database: " + std::string(sqlite3_errmsg(db_)));
   }
 }
 
 SQLiteHandler::~SQLiteHandler() {
-  sqlite3_close(db);
+  sqlite3_close(db_);
 }
 
 /**
@@ -63,9 +63,9 @@ std::vector<int> SQLiteHandler::selectEntriesOverInterval(const time_point &star
   sqlite3_stmt *stmt;
   std::string query = "SELECT size FROM QueueSnapshots WHERE timestamp BETWEEN ? AND ? ORDER BY timestamp ASC;";
 
-  int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db)));
+    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_text(stmt, 1, toISO8061(start).c_str(), -1, SQLITE_TRANSIENT);
@@ -90,9 +90,9 @@ int SQLiteHandler::selectLastEntry(int room_id) const {
   sqlite3_stmt *stmt;
   std::string query = "SELECT size FROM QueueSnapshots WHERE canteen_id = ? ORDER BY timestamp DESC LIMIT 1;";
 
-  int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db)));
+    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_int(stmt, 1, room_id);
@@ -115,9 +115,9 @@ std::vector<int> SQLiteHandler::selectAllRooms() const {
   sqlite3_stmt *stmt;
   std::string query = "SELECT DISTINCT canteen_id FROM QueueSnapshots ORDER BY canteen_id;";
 
-  int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db)));
+    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db_)));
   }
 
   while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -139,9 +139,9 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
   sqlite3_stmt *stmt;
   std::string query = "INSERT INTO QueueSnapshots (timestamp, size, canteen_id) VALUES (?, ?, ?)";
 
-  int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
-    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db)));
+    throw QueryPreparationException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_text(stmt, 1, toISO8061(time).c_str(), -1, SQLITE_TRANSIENT);
@@ -150,7 +150,7 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
 
   rc = sqlite3_step(stmt);
   if (rc != SQLITE_DONE) {
-    throw QueryExecutionException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db)));
+    throw QueryExecutionException("Failed to prepare the statement: " + std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_finalize(stmt);

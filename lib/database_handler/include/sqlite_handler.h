@@ -4,6 +4,9 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
+#ifndef LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
+#define LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
+
 #include "i_data_source.h"
 #include <sqlite3.h>
 #include <vector>
@@ -27,5 +30,7 @@ class SQLiteHandler final : public IDataSource {
   SQLiteHandler& operator=(const SQLiteHandler&) = delete;
  private:
   static std::string toISO8061(const time_point& time);
-  sqlite3* db{};
+  sqlite3* db_{};
 };
+
+#endif //LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
