@@ -10,10 +10,13 @@ add_subdirectory(lib/computer_vision)
 add_subdirectory(lib/database_handler)
 add_subdirectory(lib/tg_bot)
 
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_executable(${PROJECT_NAME}  src/main.cpp)
 
-
 target_link_libraries(${PROJECT_NAME} server computer_vision database_handler tg_bot)
+target_link_libraries(server ${Boost_LIBRARIES})
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 
