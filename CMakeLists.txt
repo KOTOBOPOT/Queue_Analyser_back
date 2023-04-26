@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
 add_subdirectory(lib/server)
 add_subdirectory(lib/computer_vision)
 add_subdirectory(lib/database_handler)
@@ -15,8 +19,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}  src/main.cpp)
 
-target_link_libraries(${PROJECT_NAME} server computer_vision database_handler tg_bot)
-target_link_libraries(server ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} server computer_vision database_handler tg_bot ${Boost_LIBRARIES})
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 
