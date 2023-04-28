@@ -57,18 +57,18 @@ int VideoProcessor::getPeopleAmount() {  // if video had ended returns -1
     const auto color_not_queue =
         cv::Scalar(0, 255, 255);  // colors[classId % colors.size()];
     if (isPersonInBox(box)) {
-      cv::rectangle(frame_, box, color_queue, 3);
+     // cv::rectangle(frame_, box, color_queue, 3);
       ++people_count;
     } else {
-      cv::rectangle(frame_, box, color_not_queue, 3);
+     // cv::rectangle(frame_, box, color_not_queue, 3);
     }
 
     // cv::rectangle(frame_, cv::Point(box.x, box.y - 20),
     //               cv::Point(box.x + box.width, box.y), color, cv::FILLED);
     
-    cv::putText(frame_, "person", cv::Point(box.x, box.y - 5),
-                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
-    cv::rectangle(frame_, queue_box_, color_queue, 3);
+   // cv::putText(frame_, "person", cv::Point(box.x, box.y - 5),
+    //            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
+   // cv::rectangle(frame_, queue_box_, color_queue, 3);
   }
 
   return people_count;
