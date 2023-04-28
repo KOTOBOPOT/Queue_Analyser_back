@@ -1,7 +1,0 @@
-#ifndef QUEUE_ANALYSER_COMPUTER_VISION_MODEL_H_
-#define QUEUE_ANALYSER_COMPUTER_VISION_MODEL_H_
-#include <iostream>
-
-void model();
-
-#endif  // QUEUE_ANALYSER_COMPUTER_VISION_MODEL_H_
