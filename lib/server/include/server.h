@@ -1,5 +1,5 @@
-#ifndef QUEUE_ANALYSER_SERVER_SERVER_H_
-#define QUEUE_ANALYSER_SERVER_SERVER_H_
+#ifndef QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SERVER_H_
+#define QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SERVER_H_
 #include <boost/asio.hpp>
 #include <memory>
 #include <string>
@@ -9,8 +9,8 @@
 class Server {
  public:
   Server(Router& router, const std::string& address = "127.0.0.1",
-         unsigned short port = 8080, const std::string& doc_root = "../src/views",
-         const int threads = 1)
+         unsigned short port = 8080,
+         const std::string& doc_root = "../src/views", const int threads = 1)
       : router_(router),
         address_(boost::asio::ip::make_address(address)),
         port_(port),
@@ -27,4 +27,4 @@ class Server {
   const int threads_ = 1;
 };
 
-#endif  // QUEUE_ANALYSER_SERVER_SERVER_H_
+#endif  // QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SERVER_H_

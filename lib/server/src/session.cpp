@@ -1,4 +1,5 @@
 #include "session.h"
+
 #include "error.h"
 
 void Session::doRead() {
@@ -16,7 +17,7 @@ void Session::doRead() {
 }
 
 void Session::onRead(boost::beast::error_code ec,
-                      std::size_t bytes_transferred) {
+                     std::size_t bytes_transferred) {
   boost::ignore_unused(bytes_transferred);
 
   // This means they closed the connection
@@ -29,11 +30,10 @@ void Session::onRead(boost::beast::error_code ec,
 
   // Send the response
   handleRequest(router_, *doc_root_, std::move(req_), lambda_);
-  
 }
 
 void Session::onWrite(bool close, boost::beast::error_code ec,
-                       std::size_t bytes_transferred) {
+                      std::size_t bytes_transferred) {
   boost::ignore_unused(bytes_transferred);
 
   if (ec) return fail(ec, "write");

@@ -1,5 +1,5 @@
-#ifndef QUEUE_ANALYSER_SERVER_SESSION_H_
-#define QUEUE_ANALYSER_SERVER_SESSION_H_
+#ifndef QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SESSION_H_
+#define QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SESSION_H_
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 #include <iostream>
@@ -80,4 +80,4 @@ class Session : public std::enable_shared_from_this<Session> {
   void doClose();
 };
 
-#endif  // QUEUE_ANALYSER_SERVER_SESSION_H_
+#endif  // QUEUE_ANALYSER_LIB_SERVER_INCLUDE_SESSION_H_

@@ -1,5 +1,5 @@
-#ifndef QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
-#define QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
+#ifndef QUEUE_ANALYSER_LIB_SERVER_INCLUDE_GENERATE_RESPONSE_H_
+#define QUEUE_ANALYSER_LIB_SERVER_INCLUDE_GENERATE_RESPONSE_H_
 #include "router.h"
 
 using Response = Router::Response;
@@ -9,10 +9,10 @@ struct StringResponse : public std::string {
   static constexpr const char* contentType = "text/plain";
 };
 
-template<typename T>
-Response generateResponse(const Request& req, const T& content,
-                          const boost::beast::http::status status =
-                          boost::beast::http::status::ok) {
+template <typename T>
+Response generateResponse(
+    const Request& req, const T& content,
+    const boost::beast::http::status status = boost::beast::http::status::ok) {
   Response res;
   res.version(req.version());
   res.result(status);
@@ -25,4 +25,4 @@ Response generateResponse(const Request& req, const T& content,
   return res;
 }
 
-#endif  // QUEUE_ANALYSER_SERVER_GENERATE_RESPONSE_H_
+#endif  // QUEUE_ANALYSER_LIB_SERVER_INCLUDE_GENERATE_RESPONSE_H_

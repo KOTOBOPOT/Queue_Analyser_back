@@ -1,8 +1,8 @@
 #include "router.h"
 
 #include <boost/beast.hpp>
-#include <optional>
 #include <iostream>
+#include <optional>
 
 #include "generate_response.h"
 

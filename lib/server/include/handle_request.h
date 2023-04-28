@@ -1,11 +1,11 @@
-#ifndef QUEUE_ANALYSER_SERVER_HANDLE_REQUEST_H_
-#define QUEUE_ANALYSER_SERVER_HANDLE_REQUEST_H_
+#ifndef QUEUE_ANALYSER_LIB_SERVER_INCLUDE_HANDLE_REQUEST_H_
+#define QUEUE_ANALYSER_LIB_SERVER_INCLUDE_HANDLE_REQUEST_H_
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "types.h"
 #include "generate_response.h"
 #include "router.h"
+#include "types.h"
 
 static int result = 0;
 
@@ -93,4 +93,4 @@ void handleRequest(Router& router, boost::beast::string_view doc_root,
   return send(std::move(res));
 }
 
-#endif  // QUEUE_ANALYSER_SERVER_HANDLE_REQUEST_H_
+#endif  // QUEUE_ANALYSER_LIB_SERVER_INCLUDE_HANDLE_REQUEST_H_
