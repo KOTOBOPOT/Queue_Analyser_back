@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "generate_response.h"
+#include "parse_query_string.h"
 #include "router.h"
 #include "server.h"
 // #include "database_handler/api.hpp"  // ?
@@ -22,24 +23,23 @@ int main(int argc, char* argv[]) {
         req, StringResponse{std::to_string(result)});
   });
 
-  rt.addHandler("GET", "/getTen", [](const Request& req) {
-    std::string result = "getTen query 10";
+  rt.addHandler("GET", "/getFromDb", [](const Request& req) {
     auto target = req.target().to_string();
-    auto pos = target.find("?");  // ищем позицию символа "?"
+    auto pos = target.find("?");
+    std::string result = "getFromDb query";
     if (pos != std::string::npos) {
-      std::string query_string = target.substr(pos + 1);  // извлекаем строку параметров
-      std::istringstream ss(query_string);  // создаем строковый поток
-      std::string param_name, param_value;
-      while (std::getline(ss, param_name, '=') && std::getline(ss, param_value, '&')) {
-        result += "\n" + param_name + " : " + param_value;  // добавляем параметр в строку результата
+      std::string queryString = target.substr(pos + 1);
+      auto params = parseQueryString(queryString);
+      auto it = params.find("period");
+      if (it != params.end()) {
+        result += "\nperiod : " + it->second;
+      } else {
+        return generateResponse<StringResponse>(
+            req, StringResponse{"Missing required parameter 'period'"},
+            boost::beast::http::status::bad_request);
       }
     }
     return generateResponse<StringResponse>(req, StringResponse{result});
-  });
-
-  rt.addHandler("POST", "/getTwo", [](const Request& req) {
-    return generateResponse<StringResponse>(req,
-                                            StringResponse{"getTwo query 2"});
   });
 
   Server tst(rt);
