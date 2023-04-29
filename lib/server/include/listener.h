@@ -1,5 +1,5 @@
-#ifndef QUEUE_ANALYSER_SERVER_LISTENER_H_
-#define QUEUE_ANALYSER_SERVER_LISTENER_H_
+#ifndef QUEUE_ANALYSER_LIB_SERVER_INCLUDE_LISTENER_H_
+#define QUEUE_ANALYSER_LIB_SERVER_INCLUDE_LISTENER_H_
 #include <boost/asio.hpp>
 #include <memory>
 #include <string>
@@ -29,4 +29,4 @@ class Listener : public std::enable_shared_from_this<Listener> {
                 boost::asio::ip::tcp::socket socket);
 };
 
-#endif  // QUEUE_ANALYSER_SERVER_LISTENER_H_
+#endif  // QUEUE_ANALYSER_LIB_SERVER_INCLUDE_LISTENER_H_

@@ -9,6 +9,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 # Задание цели
 add_library(server
+                    src/parse_query_string.cpp                    
                     src/types.cpp                    
                     src/error.cpp                    
                     src/session.cpp                    
