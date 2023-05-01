@@ -3,11 +3,11 @@
 #include <memory>
 
 #include "generate_response.h"
+#include "join.h"
 #include "parse_query_string.h"
 #include "router.h"
 #include "sqlite_handler.h"
 #include "string_to_time_point.h"
-#include "join.h"
 
 using Response = Router::Response;
 using Request = Router::Request;
@@ -35,13 +35,27 @@ std::unique_ptr<Router> getRouter() {
       auto params = parseQueryString(queryString);
       auto it = params.find("period");
       if (it != params.end()) {
-
         // Примерный вид работы с БД
-        auto param_1 = string_to_datetime(...);  // На место "..." нужно вставить начальное время интервала в формате YYYY-MM-DD HH:MM:SS.sss
-        auto param_2 = string_to_datetime(...);  // На место "..." нужно вставить конечное время интервала в формате YYYY-MM-DD HH:MM:SS.sss
-        SQLiteHandler db_handler("путь/до/бд.db");  // Вероятно это стоит вынести в конструктор Router и сделать его полем
-        auto entries = db_handler.selectEntriesOverInterval(param_1, param_2);  // В entries сохраняется вектор чисел, снимков очереди
-        std::string resulting_sequence = join(entries.begin(), entries.end(), ',');  // Здесь массив преобразуется в строку чисел, разделенных пробелами
+        auto param_1 = string_to_datetime(
+            "2023-04-21 15:48:21.002");  // На место "..." нужно вставить
+                                         // начальное время интервала в формате
+                                         // YYYY-MM-DD HH:MM:SS.sss
+        auto param_2 = string_to_datetime(
+            "2023-04-21 15:52:41.762");  // На место "..." нужно вставить
+                                         // конечное время интервала в формате
+                                         // YYYY-MM-DD HH:MM:SS.sss
+
+        SQLiteHandler db_handler(
+            "lib/database_handler/database/db.db");  // Вероятно это стоит
+                                                     // вынести в конструктор
+                                                     // Router и сделать его
+                                                     // полем
+        auto entries = db_handler.selectEntriesOverInterval(
+            param_1,
+            param_2);  // В entries сохраняется вектор чисел, снимков очереди
+        result = join(entries.begin(), entries.end(),
+                      ',');  // Здесь массив преобразуется в строку чисел,
+                             // разделенных пробелами
 
         result += "\nperiod : " + it->second;
       } else {
