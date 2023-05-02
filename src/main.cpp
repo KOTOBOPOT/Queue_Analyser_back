@@ -9,6 +9,7 @@ int main(int argc, char* argv[]) {
   Server tst(*rt);
 
   tst.run();
+  // start_write_to_db(/*...*/);
 
   return 0;
 }

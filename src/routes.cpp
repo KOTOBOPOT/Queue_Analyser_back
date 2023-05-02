@@ -12,8 +12,10 @@
 using Response = Router::Response;
 using Request = Router::Request;
 
-std::unique_ptr<Router> getRouter() {
-  auto rt = std::make_unique<Router>();
+std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
+  auto rt =
+      std::make_unique<Router>(std::make_shared<SQLiteHandler>(path_to_db));
+
   rt->addHandler("GET", "/getCurrentValue", [](const Request& req) -> Response {
     static int result = 0;
     if (rand() % 2 || result == 0) {
@@ -26,44 +28,42 @@ std::unique_ptr<Router> getRouter() {
         req, StringResponse{std::to_string(result)});
   });
 
-  rt->addHandler("GET", "/getFromDb", [](const Request& req) {
+  rt->addHandler("GET", "/getFromDb", [&rt](const Request& req) {
     auto target = req.target().to_string();
     auto pos = target.find("?");
-    std::string result = "getFromDb query";
+
     if (pos != std::string::npos) {
       std::string queryString = target.substr(pos + 1);
       auto params = parseQueryString(queryString);
-      auto it = params.find("period");
-      if (it != params.end()) {
+      auto start = params.find("period");
+      if (start != params.end()) {
         // Примерный вид работы с БД
-        auto param_1 =
-            string_to_datetime(it->second);  // На место "..." нужно вставить
-                                         // начальное время интервала в формате
-                                         // YYYY-MM-DD HH:MM:SS.sss 20230421154821002
+        auto param_1 = string_to_datetime(
+            start->second);  // На место "..." нужно вставить
+                             // начальное время интервала в формате
+                             // YYYY-MM-DD HH:MM:SS.sss 20230421154821002
         auto param_2 = string_to_datetime(
             "2023-04-21 15:52:41.762");  // На место "..." нужно вставить
                                          // конечное время интервала в формате
                                          // 20230421154821002
-        SQLiteHandler db_handler(
-            "../lib/database_handler/database/db.db");  // Вероятно это стоит
-                                                        // вынести в конструктор
-                                                        // Router и сделать его
-                                                        // полем
-        auto entries = db_handler.selectEntriesOverInterval(
+        auto entries = rt->db_handler_->selectEntriesOverInterval(
             param_1,
             param_2);  // В entries сохраняется вектор чисел, снимков очереди
-        result = join(entries.begin(), entries.end(),
-                      ',');  // Здесь массив преобразуется в строку чисел,
-                             // разделенных пробелами
+        std::string result = join(entries.begin(), entries.end(),
+                                  ',');  // Здесь массив преобразуется в строку
+                                         // чисел, разделенных пробелами
 
-        result += "\nperiod : " + it->second;
+        result += "\nperiod : " + start->second;
+        return generateResponse<StringResponse>(req, StringResponse{result});
       } else {
         return generateResponse<StringResponse>(
             req, StringResponse{"Missing required parameter 'period'"},
             boost::beast::http::status::bad_request);
       }
     }
-    return generateResponse<StringResponse>(req, StringResponse{result});
+    return generateResponse<StringResponse>(
+        req, StringResponse{"Missing required parameter 'period'"},
+        boost::beast::http::status::bad_request);
   });
 
   return rt;

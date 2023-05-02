@@ -16,5 +16,6 @@ std::optional<Router::Handler> Router::findHandler(
       return route.handler;
     }
   }
+
   return std::nullopt;
 }
