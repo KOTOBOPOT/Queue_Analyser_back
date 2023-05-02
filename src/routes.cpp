@@ -36,20 +36,19 @@ std::unique_ptr<Router> getRouter() {
       auto it = params.find("period");
       if (it != params.end()) {
         // Примерный вид работы с БД
-        auto param_1 = string_to_datetime(
-            "2023-04-21 15:48:21.002");  // На место "..." нужно вставить
+        auto param_1 =
+            string_to_datetime(it->second);  // На место "..." нужно вставить
                                          // начальное время интервала в формате
-                                         // YYYY-MM-DD HH:MM:SS.sss
+                                         // YYYY-MM-DD HH:MM:SS.sss 20230421154821002
         auto param_2 = string_to_datetime(
             "2023-04-21 15:52:41.762");  // На место "..." нужно вставить
                                          // конечное время интервала в формате
-                                         // YYYY-MM-DD HH:MM:SS.sss
-
+                                         // 20230421154821002
         SQLiteHandler db_handler(
-            "lib/database_handler/database/db.db");  // Вероятно это стоит
-                                                     // вынести в конструктор
-                                                     // Router и сделать его
-                                                     // полем
+            "../lib/database_handler/database/db.db");  // Вероятно это стоит
+                                                        // вынести в конструктор
+                                                        // Router и сделать его
+                                                        // полем
         auto entries = db_handler.selectEntriesOverInterval(
             param_1,
             param_2);  // В entries сохраняется вектор чисел, снимков очереди
