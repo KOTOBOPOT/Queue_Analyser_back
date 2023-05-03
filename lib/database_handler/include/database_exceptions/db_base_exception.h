@@ -1,6 +1,8 @@
-//
-// Created by Михаил Овакимян on 24.04.2023.
-//
+/**
+ * @file db_access_exc.cpp
+ * @brief В этом файле написан класс базовой ошибки работы с БД
+ * @author Михаил Овакимян (DaMagus26)
+ */
 
 #ifndef QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_DB_BASE_EXCEPTION_H_
 #define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_DB_BASE_EXCEPTION_H_

@@ -16,4 +16,3 @@ target_link_libraries(database_handler ${SQLite3_LIBRARIES})
 
 # Покдлючение всех .h файлов в директории include/
 target_include_directories(database_handler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(database_handler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
