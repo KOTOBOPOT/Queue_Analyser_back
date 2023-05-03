@@ -9,6 +9,7 @@
 #include <vector>
 #include <chrono>
 #include <ctime>
+#include <sstream>
 #include "../include/sqlite_handler.h"
 #include "../include/database_exceptions/db_access_exc.h"
 #include "../include/database_exceptions/query_execution_exc.h"
@@ -154,4 +155,19 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
   }
 
   sqlite3_finalize(stmt);
+}
+
+template <typename Iterator>
+std::string join(Iterator begin, Iterator end, char separator = '.') {
+  std::ostringstream o;
+  if (begin != end) {
+    o << *begin++;
+    for (; begin != end; ++begin) o << separator << *begin;
+  }
+  return o.str();
+}
+
+std::string SQLiteHandler::selectEntriesOverIntervalString(const time_point &start, const time_point &end) const {
+  std::vector<int> result_vector = selectEntriesOverInterval(start, end);
+  return join(result_vector.begin(), result_vector.end(), '\n');
 }

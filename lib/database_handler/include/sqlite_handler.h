@@ -21,6 +21,7 @@ class SQLiteHandler final : public IDataSource {
   explicit SQLiteHandler(const std::string& db_path);
   ~SQLiteHandler();
   std::vector<int> selectEntriesOverInterval(const time_point &start, const time_point &end) const override;
+  std::string selectEntriesOverIntervalString(const time_point &start, const time_point &end) const override;
   int selectLastEntry(int room_id) const override;
   std::vector<int> selectAllRooms() const override;
   void insertEntry(int measurement, time_point time, int room_id) override;

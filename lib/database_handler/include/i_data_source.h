@@ -16,6 +16,7 @@ using time_point = std::chrono::system_clock::time_point;
 class IDataSource {
 public:
   virtual std::vector<int> selectEntriesOverInterval(const time_point &start, const time_point &end) const = 0;
+  virtual std::string selectEntriesOverIntervalString(const time_point &start, const time_point &end) const = 0;
   virtual int selectLastEntry(int room_id) const = 0;
   virtual std::vector<int> selectAllRooms() const = 0;
   virtual void insertEntry(int measurement, time_point time, int room_id) = 0;
