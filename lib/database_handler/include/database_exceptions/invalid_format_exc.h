@@ -4,14 +4,15 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#ifndef QUEUEANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
-#define QUEUEANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
+#ifndef QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
+#define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
 
 #include "conversion_base_exc.h"
 
 class InvalidFormatException : public ConversionBaseException {
  public:
-  explicit InvalidFormatException(std::string &&msg) : ConversionBaseException(std::move(msg)) {};
+  explicit InvalidFormatException(std::string &&msg)
+      : ConversionBaseException(std::move(msg)){};
 };
 
-#endif //QUEUEANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
+#endif  // QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_INVALID_FORMAT_EXC_H_
