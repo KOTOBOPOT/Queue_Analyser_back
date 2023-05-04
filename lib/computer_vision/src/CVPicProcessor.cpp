@@ -1,25 +1,27 @@
-#include "CVPicProcessor.h"
-
 #include <iostream>
 #include <fstream>
+
+#include "CVPicProcessor.h"
 
 CVPicProcessor::CVPicProcessor(){
     class_list_ = load_class_list();
     load_net(net_,is_cuda_);
 }
+
 void CVPicProcessor::load_net(cv::dnn::Net &net, bool is_cuda) {
   auto result = cv::dnn::readNet("../model/yolov5s.onnx");
   if (is_cuda_) {
-    std::cout << "Attempty to use CUDA\n";
+    //Attempty to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
     result.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA_FP16);
   } else {
-    std::cout << "Running on CPU\n";
+    //Running on CPU
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
     result.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
   }
   net = result;
 }
+
 cv::Mat CVPicProcessor::format_yolov5(const cv::Mat &source) {
   int col = source.cols;
   int row = source.rows;
@@ -32,6 +34,7 @@ cv::Mat CVPicProcessor::format_yolov5(const cv::Mat &source) {
 void CVPicProcessor::getBoxes(cv::Mat &image, std::vector<Detection> &output) {
   detect(image, net_, output, class_list_);
 }
+
 void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
                             std::vector<Detection> &output,
                             const std::vector<std::string> &className) {
@@ -40,14 +43,14 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
   auto input_image = format_yolov5(image);
 
   cv::dnn::blobFromImage(input_image, blob, 1. / 255.,
-                         cv::Size(INPUT_WIDTH, INPUT_HEIGHT), cv::Scalar(),
+                         cv::Size(kInputWidth, kInputHeight), cv::Scalar(),
                          true, false);
   net.setInput(blob);
   std::vector<cv::Mat> outputs;
   net.forward(outputs, net.getUnconnectedOutLayersNames());
 
-  float x_factor = input_image.cols / INPUT_WIDTH;
-  float y_factor = input_image.rows / INPUT_HEIGHT;
+  float x_factor = input_image.cols / kInputWidth;
+  float y_factor = input_image.rows / kInputHeight;
 
   float *data = (float *)outputs[0].data;
 
@@ -60,13 +63,13 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 
   for (int i = 0; i < rows; ++i) {
     float confidence = data[4];
-    if (confidence >= CONFIDENCE_THRESHOLD) {
+    if (confidence >= kConfidenceThreshold) {
       float *classes_scores = data + 5;
       cv::Mat scores(1, className.size(), CV_32FC1, classes_scores);
       cv::Point class_id;
       double max_class_score;
       minMaxLoc(scores, 0, &max_class_score, 0, &class_id);
-      if (max_class_score > SCORE_THRESHOLD) {
+      if (max_class_score > kScoreThreshold) {
         confidences.push_back(confidence);
 
         class_ids.push_back(class_id.x);
@@ -87,7 +90,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
   }
 
   std::vector<int> nms_result;
-  cv::dnn::NMSBoxes(boxes, confidences, SCORE_THRESHOLD, NMS_THRESHOLD,
+  cv::dnn::NMSBoxes(boxes, confidences, kScoreThreshold, kNmsThreshold,
                     nms_result);
   for (int i = 0; i < nms_result.size(); i++) {
     int idx = nms_result[i];

@@ -1,36 +1,44 @@
+#ifndef QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_VIDEO_PROCESSOR_H_
+#define QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_VIDEO_PROCESSOR_H_
+
 #include <opencv2/opencv.hpp>
 #include <string>
 
 #include "CVPicProcessor.h"
+#include "IVideoSource.h"
 
-//TODO: сделать интерфейс взаимодействия с видеоданными. 
-//Решение предыдущей проблемы с тем, что time_period - не используется в видео с камеры:
-// Тупо сделать так, чтобы тайм период задавался только в  файловом(а не камера) конструкторе 
-//VideoProcessor и нигде не сохранялся кроме
-// как в объекте FileVideoSource. 
+const cv::Rect kDefaultQueueBox = cv::Rect(
+    100, 0, 650, 250);  //(100,0)-coordinates of left-up box corner. 100 - shift
+                        //from left side, 0 - from top, (650,250) - sides sizes.
+                        //650 - horizontal, 250 - vertical
+
 class VideoProcessor {
  public:
-  VideoProcessor(const std::string& filename, size_t fps = 28,
-                 float time_period = 0);  // Means that each 0.5 sec get measure
-  ~VideoProcessor();
-  int getPeopleAmount();
-  void updateTimePeriod(float time_period);
+  // File Video init
+  VideoProcessor(
+      const std::string& filename, size_t fps = 28,
+      float time_period = 0.5, const cv::Rect& queue_box = kDefaultQueueBox);  // Means that each 0.5 sec will get measure
+  // Real time camera init
+  VideoProcessor(int camera_index = 0,const cv::Rect& queue_box = kDefaultQueueBox);
+
+  //  ~VideoProcessor();
+  int getQueuePeopleAmount();
   void setCudaState(bool cuda_state);
 
  public:
-  void readFrame();
-  bool isCaptureOpened();
+  bool isVideoOpened();
   bool isEndOfVideo();
-  void skipFrames();
   bool isPersonInBox(cv::Rect& person_box);
+  std::vector<cv::Rect> getPeopleBoxes();
+
  public:
-  cv::Mat frame_;             // Current frame
-  cv::VideoCapture capture_;  // Video source
+  std::shared_ptr<IVideoSource> video_source_;
+
+  cv::Mat frame_;  // Current frame. It's public for external visualization
+  cv::Rect queue_box_;// If person get into this box, person counts as in queue
  private:
   CVPicProcessor pic_processor_ = CVPicProcessor();
   bool is_cuda_ = false;
-  float time_period_;
-  size_t fps_;
-  size_t skip_frames_ = 0;  // for videofiles
-  cv::Rect queue_box_ = cv::Rect(100, 0, 650, 250);
 };
+
+#endif
