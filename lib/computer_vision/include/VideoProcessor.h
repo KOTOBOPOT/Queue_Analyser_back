@@ -28,7 +28,7 @@ class VideoProcessor {
  public:
   bool isVideoOpened();
   bool isEndOfVideo();
-  bool isPersonInBox(cv::Rect& person_box);
+  static bool isPersonInBox(const cv::Rect& person_box, const cv::Rect& queue_box=kDefaultQueueBox);
   std::vector<cv::Rect> getPeopleBoxes();
 
  public:

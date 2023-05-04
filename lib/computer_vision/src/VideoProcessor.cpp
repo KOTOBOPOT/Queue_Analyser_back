@@ -9,6 +9,7 @@ VideoProcessor::VideoProcessor(const std::string& filename, size_t fps,
                                float time_period, const cv::Rect& queue_box) {
   video_source_ = std::make_shared<FileVideo>(filename, fps, time_period);
   queue_box_ = queue_box;
+  
 }
 
 VideoProcessor::VideoProcessor(int camera_index, const cv::Rect& queue_box) {
@@ -59,7 +60,7 @@ int VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
   }
   return people_in_queue_amount;
 }
-bool VideoProcessor::isPersonInBox(cv::Rect& person_box) {
+bool VideoProcessor::isPersonInBox(const cv::Rect& person_box, const cv::Rect& queue_box) {
   size_t person_box_width = person_box.width;
   size_t person_box_height = person_box.height;
   size_t person_box_x = person_box.x;
@@ -74,24 +75,19 @@ bool VideoProcessor::isPersonInBox(cv::Rect& person_box) {
                                          person_box_y + person_box_height);
 
   // bool contains_at_least_one_point = false;
-  bool contains_at_least_one_point = queue_box_.contains(left_up_point);
+  bool contains_at_least_one_point = queue_box.contains(left_up_point);
   contains_at_least_one_point =
-      contains_at_least_one_point | queue_box_.contains(left_down_point);
+      contains_at_least_one_point | queue_box.contains(left_down_point);
   contains_at_least_one_point =
-      contains_at_least_one_point | queue_box_.contains(right_up_point);
+      contains_at_least_one_point | queue_box.contains(right_up_point);
   contains_at_least_one_point =
-      contains_at_least_one_point | queue_box_.contains(right_down_point);
+      contains_at_least_one_point | queue_box.contains(right_down_point);
   return contains_at_least_one_point;
 }
-// void VideoProcessor::updateTimePeriod(float time_period) {
-//   if (time_period >= 0) {
-//     time_period_ = time_period;
-//   }
-// }
+
 bool VideoProcessor::isEndOfVideo() {
   return frame_.empty();
-}  // frame_.empty();}//!isCaptureOpened(); }
-void VideoProcessor::setCudaState(bool cuda_state) { is_cuda_ = cuda_state; }
-// void VideoProcessor::readFrame() { capture_.read(frame_); }
+}  
 
-// void VideoProcessor::initModel(){load_net(net_, is_cuda_);}
+void VideoProcessor::setCudaState(bool cuda_state) { is_cuda_ = cuda_state; }
+
