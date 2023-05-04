@@ -17,23 +17,30 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
       std::make_unique<Router>(std::make_shared<SQLiteHandler>(path_to_db));
 
   rt->addHandler("GET", "/getFromDb", [&rt](const Request& req) {
-    auto params = parseQueryString(req.target().to_string());
+    try {
+      auto params = parseQueryString(req.target().to_string());
 
-    if (params.find("start") == params.end() ||
-        params.find("end") == params.end()) {
+      if (params.find("start") == params.end() ||
+          params.find("end") == params.end()) {
+        return generateResponse<StringResponse>(
+            req, StringResponse{"Missing required parameter 'start' or 'end'"},
+            boost::beast::http::status::bad_request);
+      }
+
+      // начальное время интервала в формате
+      // YYYYMMDDHHMMSSsss 20230421154821002
+      auto start = continuous_nums_to_datetime(params["start"]);
+
+      auto end = continuous_nums_to_datetime(params["end"]);
+      auto entries =
+          rt->db_handler_->selectEntriesOverIntervalString(start, end);
+
+      return generateResponse<StringResponse>(req, StringResponse{entries});
+    } catch (const std::exception& e) {
+      std::string msg = e.what();
       return generateResponse<StringResponse>(
-          req, StringResponse{"Missing required parameter 'start' or 'end'"},
-          boost::beast::http::status::bad_request);
+          req, StringResponse{msg}, boost::beast::http::status::bad_request);
     }
-
-    // начальное время интервала в формате
-    // YYYYMMDDHHMMSSsss 20230421154821002
-    auto start = continuous_nums_to_datetime(params["start"]);
-
-    auto end = continuous_nums_to_datetime(params["end"]);
-    auto entries = rt->db_handler_->selectEntriesOverIntervalString(start, end);
-
-    return generateResponse<StringResponse>(req, StringResponse{entries});
   });
 
   rt->addHandler("GET", "/getCurrentValue", [](const Request& req) -> Response {
