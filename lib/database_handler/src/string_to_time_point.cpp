@@ -16,13 +16,13 @@
 std::chrono::system_clock::time_point string_to_datetime(
     const std::string& str) {
   std::tm tm = {};
-  std::istringstream ss(str);
+  std::istringstream date_ss(str);
   char decimal_point;
   int milliseconds;
 
-  ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> decimal_point >>
-      milliseconds;
-  if (ss.fail() || decimal_point != '.') {
+  date_ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> decimal_point >>
+          milliseconds;
+  if (date_ss.fail() || decimal_point != '.') {
     throw ReformatException("Failed to parse the custom format string: " + str);
   }
 

@@ -5,12 +5,12 @@
 
 template <typename Iterator>
 std::string join(Iterator begin, Iterator end, char separator = '.') {
-  std::ostringstream o;
+  std::ostringstream result;
   if (begin != end) {
-    o << *begin++;
-    for (; begin != end; ++begin) o << separator << *begin;
+    result << *begin++;
+    for (; begin != end; ++begin) result << separator << *begin;
   }
-  return o.str();
+  return result.str();
 }
 
 #endif  // QUEUE_ANALYZER_INCLUDE_JOIN_H_
