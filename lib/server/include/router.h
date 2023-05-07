@@ -3,8 +3,11 @@
 
 #include <boost/beast.hpp>
 #include <boost/beast/http.hpp>
+#include <memory>
 #include <optional>
 #include <vector>
+
+#include "sqlite_handler.h"
 
 class Router {
  public:
@@ -24,7 +27,8 @@ class Router {
     Handler handler;
   };
 
-  Router() = default;
+  Router(std::shared_ptr<IDataSource> db_handler)
+      : db_handler_(std::move(db_handler)){};
 
   // move constructor
   Router(Router&& other) noexcept : routes_(std::move(other.routes_)) {}
@@ -41,6 +45,8 @@ class Router {
   }
 
   std::optional<Handler> findHandler(const Request& req) const;
+
+  std::shared_ptr<IDataSource> db_handler_;
 
  private:
   std::vector<Route> routes_;

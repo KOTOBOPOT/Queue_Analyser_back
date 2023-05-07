@@ -20,7 +20,7 @@ class Server {
   void run();
 
  private:
-  Router& router_;
+  Router& router_;  // Переделать в умный указатель
   const boost::asio::ip::address address_;
   const unsigned short port_;
   const std::shared_ptr<std::string const> doc_root_;
