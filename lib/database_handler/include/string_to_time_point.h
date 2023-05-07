@@ -7,9 +7,10 @@
 #ifndef QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_STRING_TO_TIME_POINT_H_
 #define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_STRING_TO_TIME_POINT_H_
 
-#include <string>
 #include <chrono>
+#include <string>
 
-std::chrono::system_clock::time_point string_to_datetime(const std::string& str);
+std::chrono::system_clock::time_point string_to_datetime(
+    const std::string& str);
 
-#endif //QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_STRING_TO_TIME_POINT_H_
+#endif  // QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_STRING_TO_TIME_POINT_H_

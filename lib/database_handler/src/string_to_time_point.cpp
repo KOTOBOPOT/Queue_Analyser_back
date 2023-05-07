@@ -4,28 +4,30 @@
  * @author Михаил Овакимян (DaMagus26)
  */
 
-#include <ctime>
-#include <string>
 #include <chrono>
-#include <sstream>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include "../include/string_to_time_point.h"
 #include "../include/database_exceptions/reformat_exc.h"
 
-std::chrono::system_clock::time_point string_to_datetime(const std::string& str)
-{
+std::chrono::system_clock::time_point string_to_datetime(
+    const std::string& str) {
   std::tm tm = {};
   std::istringstream ss(str);
   char decimal_point;
   int milliseconds;
 
-  ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> decimal_point >> milliseconds;
+  ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> decimal_point >>
+      milliseconds;
   if (ss.fail() || decimal_point != '.') {
     throw ReformatException("Failed to parse the custom format string: " + str);
   }
 
-  auto time_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::seconds(std::mktime(&tm)));
+  auto time_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::seconds(std::mktime(&tm)));
   time_since_epoch += std::chrono::milliseconds(milliseconds);
   return std::chrono::system_clock::time_point(time_since_epoch);
 }

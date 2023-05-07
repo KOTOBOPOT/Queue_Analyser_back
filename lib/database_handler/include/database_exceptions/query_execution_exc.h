@@ -11,7 +11,8 @@
 
 class QueryExecutionException : public DBBaseException {
  public:
-  explicit QueryExecutionException(std::string &&msg) : DBBaseException(std::move(msg)) {};
+  explicit QueryExecutionException(std::string &&msg)
+      : DBBaseException(std::move(msg)){};
 };
 
-#endif //QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_QUERY_EXECUTION_H_
+#endif  // QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_DATABASE_EXCEPTIONS_QUERY_EXECUTION_H_
