@@ -8,6 +8,10 @@ set(Boost_USE_STATIC_RUNTIME ON)
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS} ../database_handler)
 
+enable_testing()
+find_package(GTest REQUIRED)
+add_subdirectory(tests)
+
 # Задание цели
 add_library(server
                     src/parse_query_string.cpp                    
