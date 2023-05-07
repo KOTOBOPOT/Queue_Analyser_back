@@ -16,7 +16,7 @@ std::chrono::system_clock::time_point continuous_nums_to_datetime(const std::str
   std::tm tm = {};
 
   if (str.length() != 17 || !is_number(str)) {
-    throw InvalidFormatException("Invalid string format: " + str);
+    throw InvalidFormatException("Invalid string length: " + str + " (must be 17 characters long)");
   }
 
   std::stringstream ss;

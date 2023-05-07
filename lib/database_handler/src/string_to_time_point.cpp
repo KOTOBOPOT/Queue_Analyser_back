@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include "../include/string_to_time_point.h"
+#include "../include/database_exceptions/reformat_exc.h"
 
 std::chrono::system_clock::time_point string_to_datetime(const std::string& str)
 {
@@ -21,8 +22,7 @@ std::chrono::system_clock::time_point string_to_datetime(const std::string& str)
 
   ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S") >> decimal_point >> milliseconds;
   if (ss.fail() || decimal_point != '.') {
-    std::cerr << "Failed to parse the custom format string: " << str << std::endl;
-    return std::chrono::system_clock::time_point::min();
+    throw ReformatException("Failed to parse the custom format string: " + str);
   }
 
   auto time_since_epoch = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::seconds(std::mktime(&tm)));
