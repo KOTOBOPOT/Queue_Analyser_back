@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
+
 #include <chrono>
 #include <ctime>
 #include <iostream>
+
 #include "parse_query_string.h"
 
 TEST(ParsingParams, TargetWithoutQuestionSymbolTest) {
@@ -26,16 +28,20 @@ TEST(ParsingParams, ParsingOneParamTest) {
 }
 
 TEST(ParsingParams, ParsingTwoParamsTest) {
-  std::string target = "http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000";
+  std::string target =
+      "http://localhost:8080/"
+      "getFromDb?start=20230501000000000&end=20230501235900000";
   auto params = parseQueryString(target);
 
   EXPECT_EQ(params["start"], "20230501000000000");
 }
 
 TEST(ParsingParams, ParsingManyParamsTest) {
-  std::string target = "http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000&umbrella=rs";
+  std::string target =
+      "http://localhost:8080/"
+      "getFromDb?start=20230501000000000&end=20230501235900000&umbrella=rs";
   auto params = parseQueryString(target);
-  
+
   EXPECT_EQ(params.size(), 3);
 }
 
@@ -52,4 +58,3 @@ TEST(ParsingParams, ParsingEmpptyInParamsTest) {
 
   EXPECT_EQ(params["b"], "");
 }
-
