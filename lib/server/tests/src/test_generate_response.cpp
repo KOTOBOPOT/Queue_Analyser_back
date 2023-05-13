@@ -22,16 +22,6 @@ TEST(GenerateResponse, CustomStatusTest) {
   EXPECT_EQ(res.result_int(), 404);
 }
 
-// TEST(GenerateResponse, CustomContentTypeTest) {
-//   Router::Request req;
-//   struct CustomType : public std::string {
-//     static constexpr const char* contentType = "application/octet-stream";
-//   };
-//   CustomType content;
-//   auto res = generateResponse(req, content);
-//   EXPECT_EQ(res[boost::beast::http::field::content_type], "application/octet-stream");
-// }
-
 TEST(GenerateResponse, NoKeepAliveTest) {
   Router::Request req;
   StringResponse content;
@@ -40,10 +30,22 @@ TEST(GenerateResponse, NoKeepAliveTest) {
   EXPECT_FALSE(res.keep_alive());
 }
 
-TEST(GenerateTextResponse, NoKeepAliveTest) {
+TEST(GenerateResponse, CorrectResponseBodyTest) {
   Router::Request req;
   StringResponse content("My text response");
   req.keep_alive(false);
   auto res = generateResponse(req, content);
   EXPECT_EQ(res.body(), "My text response");
+}
+
+// Тестируем новую структуру с другим типом контента
+struct CustomType : public std::string {
+  static constexpr const char* contentType = "application/octet-stream";
+};
+
+TEST(GenerateResponse, CustomContentTypeTest) {
+  Router::Request req;
+  CustomType content;
+  auto res = generateResponse(req, content);
+  EXPECT_EQ(res[boost::beast::http::field::content_type], CustomType::contentType);
 }
