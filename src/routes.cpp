@@ -22,9 +22,9 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
 
       if (params.find("start") == params.end() ||
           params.find("end") == params.end()) {
-        return generateResponse<StringResponse>(
-            req, StringResponse{"Missing required parameter 'start' or 'end'"},
-            boost::beast::http::status::bad_request);
+        StringResponse msg("Missing required parameter 'start' or 'end'");
+        return generateResponse(req, msg,
+                                boost::beast::http::status::bad_request);
       }
 
       // начальное время интервала в формате
@@ -32,14 +32,14 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
       auto start = continuous_nums_to_datetime(params["start"]);
 
       auto end = continuous_nums_to_datetime(params["end"]);
-      auto entries =
-          rt->db_handler_->selectEntriesOverIntervalString(start, end);
+      auto entries = StringResponse(
+          rt->db_handler_->selectEntriesOverIntervalString(start, end));
 
-      return generateResponse<StringResponse>(req, StringResponse{entries});
+      return generateResponse(req, entries);
     } catch (const std::exception& e) {
-      std::string msg = e.what();
-      return generateResponse<StringResponse>(
-          req, StringResponse{msg}, boost::beast::http::status::bad_request);
+      auto msg = StringResponse(e.what());
+      return generateResponse(req, msg,
+                              boost::beast::http::status::bad_request);
     }
   });
 
@@ -51,8 +51,9 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
       result -= 1;
     }
     result %= 25;
-    return generateResponse<StringResponse>(
-        req, StringResponse{std::to_string(result)});
+    auto content = StringResponse(std::to_string(result));
+
+    return generateResponse(req, content);
   });
 
   return rt;
