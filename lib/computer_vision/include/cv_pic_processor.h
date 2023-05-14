@@ -23,12 +23,11 @@ class CVPicProcessor {
   void getBoxes(cv::Mat &image, std::vector<Detection> &output);
 
  private:
-  void initModel();
   void detect(cv::Mat &image, cv::dnn::Net &net, std::vector<Detection> &output,
               const std::vector<std::string> &className);
-  void load_net(cv::dnn::Net &net, bool is_cuda);
-  cv::Mat format_yolov5(const cv::Mat &source);
-  std::vector<std::string> load_class_list();
+  void loadNet(cv::dnn::Net &net, bool is_cuda);
+  cv::Mat formatYoloV5(const cv::Mat &source);
+  std::vector<std::string> loadClassList();
 
  private:
   cv::dnn::Net net_;

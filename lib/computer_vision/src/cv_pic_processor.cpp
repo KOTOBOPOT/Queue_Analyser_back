@@ -4,14 +4,14 @@
 #include <iostream>
 
 CVPicProcessor::CVPicProcessor() {
-  class_list_ = load_class_list();
-  load_net(net_, is_cuda_);
+  class_list_ = loadClassList();
+  loadNet(net_, is_cuda_);
 }
 
-void CVPicProcessor::load_net(cv::dnn::Net &net, bool is_cuda) {
+void CVPicProcessor::loadNet(cv::dnn::Net &net, bool is_cuda) {
   auto result = cv::dnn::readNet("../static/model/yolov5s.onnx");
   if (is_cuda_) {
-    // Attempty to use CUDA
+    // Attempt to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
     result.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA_FP16);
   } else {
@@ -22,7 +22,7 @@ void CVPicProcessor::load_net(cv::dnn::Net &net, bool is_cuda) {
   net = result;
 }
 
-cv::Mat CVPicProcessor::format_yolov5(const cv::Mat &source) {
+cv::Mat CVPicProcessor::formatYoloV5(const cv::Mat &source) {
   int col = source.cols;
   int row = source.rows;
   int _max = MAX(col, row);
@@ -40,7 +40,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
                             const std::vector<std::string> &className) {
   cv::Mat blob;
 
-  auto input_image = format_yolov5(image);
+  auto input_image = formatYoloV5(image);
 
   cv::dnn::blobFromImage(input_image, blob, 1. / 255.,
                          cv::Size(kInputWidth, kInputHeight), cv::Scalar(),
@@ -54,14 +54,14 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 
   float *data = (float *)outputs[0].data;
 
-  const int dimensions = 85;
-  const int rows = 25200;
+  const int kDimensionsAmount = 85;
+  const int kRowsAmount = 25200;
 
   std::vector<int> class_ids;
   std::vector<float> confidences;
   std::vector<cv::Rect> boxes;
 
-  for (int i = 0; i < rows; ++i) {
+  for (int i = 0; i < kRowsAmount; ++i) {
     float confidence = data[4];
     if (confidence >= kConfidenceThreshold) {
       float *classes_scores = data + 5;
@@ -86,7 +86,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
       }
     }
 
-    data += 85;
+    data += kDimensionsAmount;
   }
 
   std::vector<int> nms_result;
@@ -102,7 +102,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
   }
 }
 
-std::vector<std::string> CVPicProcessor::load_class_list() {
+std::vector<std::string> CVPicProcessor::loadClassList() {
   std::vector<std::string> class_list;
   std::ifstream ifs("../model/classes.txt");
   std::string line;
