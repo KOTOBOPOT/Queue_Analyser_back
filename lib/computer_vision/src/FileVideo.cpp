@@ -1,6 +1,6 @@
 #include <opencv2/opencv.hpp>
 
-#include "FileVideo.h"
+#include "file_video.h"
 
 FileVideo::FileVideo(const std::string& filename, size_t fps, float skip_secs) {
   filename_ = filename;
@@ -34,6 +34,5 @@ void FileVideo::skipFrames() {
     skipFrame();
   }
 }
-
 
 void FileVideo::skipFrame() { capture_.read(frame_); }

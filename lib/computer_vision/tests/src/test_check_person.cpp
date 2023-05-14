@@ -3,7 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "VideoProcessor.h"
+#include "video_processor.h"
 
 TEST(PersonInBoxTest, BasicCase) {
   cv::Rect queue_box = cv::Rect(300, 100, 600, 250);

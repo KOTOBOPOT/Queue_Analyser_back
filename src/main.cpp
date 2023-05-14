@@ -4,7 +4,7 @@
 #include "server.h"
 #include "routes.h"
 
-#include "VideoProcessor.h"
+#include "video_processor.h"
 
 int main(int argc, char* argv[]) {
   VideoProcessor vp = VideoProcessor(0);

@@ -1,15 +1,14 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-#include "CamVideo.h"
-#include "FileVideo.h"
-#include "VideoProcessor.h"
+#include "cam_video.h"
+#include "file_video.h"
+#include "video_processor.h"
 
 VideoProcessor::VideoProcessor(const std::string& filename, size_t fps,
                                float time_period, const cv::Rect& queue_box) {
   video_source_ = std::make_shared<FileVideo>(filename, fps, time_period);
   queue_box_ = queue_box;
-  
 }
 
 VideoProcessor::VideoProcessor(int camera_index, const cv::Rect& queue_box) {
@@ -60,7 +59,8 @@ int VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
   }
   return people_in_queue_amount;
 }
-bool VideoProcessor::isPersonInBox(const cv::Rect& person_box, const cv::Rect& queue_box) {
+bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
+                                   const cv::Rect& queue_box) {
   size_t person_box_width = person_box.width;
   size_t person_box_height = person_box.height;
   size_t person_box_x = person_box.x;
@@ -85,9 +85,6 @@ bool VideoProcessor::isPersonInBox(const cv::Rect& person_box, const cv::Rect& q
   return contains_at_least_one_point;
 }
 
-bool VideoProcessor::isEndOfVideo() {
-  return frame_.empty();
-}  
+bool VideoProcessor::isEndOfVideo() { return frame_.empty(); }
 
 void VideoProcessor::setCudaState(bool cuda_state) { is_cuda_ = cuda_state; }
-

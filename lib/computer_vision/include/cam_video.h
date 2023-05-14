@@ -1,7 +1,7 @@
 #ifndef QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_CAM_VIDEO_H_
 #define QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_CAM_VIDEO_H_
 
-#include "IVideoSource.h"
+#include "i_video_source.h"
 
 class CamVideo final : public IVideoSource {
  public:

@@ -4,8 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-#include "CVPicProcessor.h"
-#include "IVideoSource.h"
+#include "cv_pic_processor.h"
+#include "i_video_source.h"
 
 const cv::Rect kDefaultQueueBox = cv::Rect(
     100, 0, 650, 250);  //(100,0)-coordinates of left-up box corner. 100 - shift

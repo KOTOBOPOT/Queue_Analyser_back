@@ -2,7 +2,7 @@
 #define QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_FILE_VIDEO_H_
 
 
-#include "IVideoSource.h"
+#include "i_video_source.h"
 
 class FileVideo final : public IVideoSource {
  public:

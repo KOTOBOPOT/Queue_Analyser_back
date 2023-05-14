@@ -1,6 +1,6 @@
-#include <opencv2/opencv.hpp>
+#include "cam_video.h"
 
-#include "CamVideo.h"
+#include <opencv2/opencv.hpp>
 
 CamVideo::CamVideo(int cam_index) {
   camera_index_ = cam_index;
@@ -10,6 +10,4 @@ CamVideo::CamVideo(int cam_index) {
   }
 }
 
-void CamVideo::getPicture(cv::Mat& pic) {
-    capture_.read(pic);
-}
+void CamVideo::getPicture(cv::Mat& pic) { capture_.read(pic); }

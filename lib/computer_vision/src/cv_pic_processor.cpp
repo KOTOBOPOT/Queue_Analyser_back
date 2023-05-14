@@ -1,21 +1,21 @@
-#include <iostream>
+#include "cv_pic_processor.h"
+
 #include <fstream>
+#include <iostream>
 
-#include "CVPicProcessor.h"
-
-CVPicProcessor::CVPicProcessor(){
-    class_list_ = load_class_list();
-    load_net(net_,is_cuda_);
+CVPicProcessor::CVPicProcessor() {
+  class_list_ = load_class_list();
+  load_net(net_, is_cuda_);
 }
 
 void CVPicProcessor::load_net(cv::dnn::Net &net, bool is_cuda) {
   auto result = cv::dnn::readNet("../model/yolov5s.onnx");
   if (is_cuda_) {
-    //Attempty to use CUDA
+    // Attempty to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
     result.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA_FP16);
   } else {
-    //Running on CPU
+    // Running on CPU
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
     result.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
   }
