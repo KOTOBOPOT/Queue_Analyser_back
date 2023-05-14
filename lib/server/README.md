@@ -5,7 +5,7 @@
 #### Установка Boost/Beast и Boost/Asio для Ubuntu
 Вы можете установить библиотеки Boost/Beast и Boost/Asio из официального репозитория Ubuntu с помощью следующей команды в терминале:
 ```shell
-sudo apt-get install libboost-beast-dev libboost-asio-dev
+sudo apt-get install libboost-all-dev
 ```
 
 #### Установка Boost/Beast и Boost/Asio для MacOS

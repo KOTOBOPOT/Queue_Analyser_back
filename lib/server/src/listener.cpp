@@ -1,4 +1,5 @@
 #include "listener.h"
+
 #include "error.h"
 
 Listener::Listener(Router& router, boost::asio::io_context& ioc,
@@ -52,7 +53,8 @@ void Listener::onAccept(boost::beast::error_code ec,
     fail(ec, "accept");
   } else {
     // Создание объекта Session и передача ему принятого сокета
-    auto session = std::make_shared<Session>(router_, std::move(socket), doc_root_);
+    auto session =
+        std::make_shared<Session>(router_, std::move(socket), doc_root_);
 
     // Запуск обработки соединения в отдельном потоке
     session->run();

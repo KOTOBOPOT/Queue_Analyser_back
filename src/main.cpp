@@ -1,38 +1,13 @@
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "generate_response.h"
-#include "router.h"
 #include "server.h"
-// #include "database_handler/api.hpp"  // ?
-using Response = Router::Response;
-using Request = Router::Request;
+#include "routes.h"
 
 int main(int argc, char* argv[]) {
-  Router rt;
-  rt.addHandler("GET", "/getCurrentValue", [](const Request& req) -> Response {
-    static int result = 0;
-    if (rand() % 2 || result == 0) {
-      result += 5;
-    } else {
-      result -= 1;
-    }
-    result %= 25;
-    return generateResponse<StringResponse>(
-        req, StringResponse{std::to_string(result)});
-  });
+  auto rt = getRouter();
+  Server tst(*rt);
 
-  rt.addHandler("GET", "/getTen", [](const Request& req) {
-    return generateResponse<StringResponse>(req,
-                                            StringResponse{"getTen query 10"});
-  });
-
-  rt.addHandler("POST", "/getTwo", [](const Request& req) {
-    return generateResponse<StringResponse>(req,
-                                            StringResponse{"getTwo query 2"});
-  });
-
-  Server tst(rt);
   tst.run();
 
   return 0;
