@@ -14,16 +14,9 @@ const cv::Rect kDefaultQueueBox = cv::Rect(
 
 class VideoProcessor {
  public:
-  // File Video init
-  VideoProcessor(
-      const std::string& filename, size_t fps = 28, float time_period = 0.5,
-      const cv::Rect& queue_box =
-          kDefaultQueueBox);  // Means that each 0.5 sec will get measure
-  // Real time camera init
-  VideoProcessor(int camera_index = 0,
+  VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
                  const cv::Rect& queue_box = kDefaultQueueBox);
 
-  //  ~VideoProcessor();
   int getQueuePeopleAmount();
   void setCudaState(bool cuda_state);
 

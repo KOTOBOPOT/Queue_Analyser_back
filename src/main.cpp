@@ -1,15 +1,20 @@
 #include <boost/beast.hpp>
 #include <iostream>
 
-#include "server.h"
+
 #include "routes.h"
-
-#include "video_processor.h"
-
+#include "server.h"
 int main(int argc, char* argv[]) {
-  VideoProcessor vp = VideoProcessor(0);
-  std::cout<<"Current people amount on web camera: " <<vp.getQueuePeopleAmount()<<std::endl;
-  
+
+    // std::shared_ptr<IVideoSource> vid_src = std::make_shared<FileVideo>("../static/video_examples/ex1.mp4",2);//2 - это кол-во секунд, которое мы пропускаем
+    // //std::shared_ptr<IVideoSource> vid_src = std::make_shared<CamVideo>(0);
+    
+    // VideoProcessor vp = VideoProcessor(vid_src);
+    // for (int i = 0; i < 100; ++i) {
+    //   std::cout << i << " step . Current people amount from videosource: "
+    //             << vp.getQueuePeopleAmount() << std::endl; //Если видео кончилось, возращает -1
+    // }
+
   auto rt = getRouter();
   Server tst(*rt);
 

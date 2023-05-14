@@ -5,7 +5,7 @@
 
 class FileVideo final : public IVideoSource {
  public:
-  FileVideo(const std::string& filename, size_t fps, float skip_secs);
+  FileVideo(const std::string& filename, float skip_secs=0.5);
   void getPicture(cv::Mat& pic) override;
 
  private:

@@ -27,7 +27,7 @@ class Router {
     Handler handler;
   };
 
-  Router(std::shared_ptr<IDataSource> db_hload_netandler)
+  Router(std::shared_ptr<IDataSource> db_handler)
       : db_handler_(std::move(db_handler)){};
 
   // move constructor

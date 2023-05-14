@@ -2,17 +2,18 @@
 
 #include <opencv2/opencv.hpp>
 
-FileVideo::FileVideo(const std::string& filename, size_t fps, float skip_secs) {
+FileVideo::FileVideo(const std::string& filename, float skip_secs) {
   filename_ = filename;
 
-  fps_ = fps;
   skip_secs_ = skip_secs;
-  skip_frames_ = fps_ * skip_secs_;
 
   capture_.open(filename);
   if (!isCaptureOpened()) {
     std::cerr << "Error opening video file\n";
   }
+  fps_ = capture_.get(cv::CAP_PROP_FPS); ;
+  skip_frames_ = fps_ * skip_secs_;
+
 }
 
 void FileVideo::getPicture(cv::Mat& pic) {

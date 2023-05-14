@@ -21,6 +21,7 @@ include_directories(include)
 add_executable(${PROJECT_NAME}  
                     src/main.cpp 
                     src/routes.cpp
+                    src/vid_process.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} server computer_vision database_handler tg_bot ${Boost_LIBRARIES})

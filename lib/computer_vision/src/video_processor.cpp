@@ -5,17 +5,9 @@
 
 #include "cam_video.h"
 #include "file_video.h"
-
-VideoProcessor::VideoProcessor(const std::string& filename, size_t fps,
-                               float time_period, const cv::Rect& queue_box) {
-  video_source_ = std::make_shared<FileVideo>(filename, fps, time_period);
-  queue_box_ = queue_box;
-}
-
-VideoProcessor::VideoProcessor(int camera_index, const cv::Rect& queue_box) {
-  video_source_ = std::make_shared<CamVideo>(camera_index);
-  queue_box_ = queue_box;
-}
+VideoProcessor::VideoProcessor(std::vector<std::shared_ptr<IVideoSource>> vid_source,
+                               const cv::Rect& queue_box)
+    : video_source_(vid_source), queue_box_(queue_box) {}
 
 bool VideoProcessor::isVideoOpened() {
   return video_source_->isCaptureOpened();
@@ -25,7 +17,6 @@ std::vector<cv::Rect> VideoProcessor::getPeopleBoxes() {
   std::vector<Detection> cv_model_output;
   std::vector<cv::Rect> people_boxes;
   int people_count = 0;
-  video_source_->getPicture(frame_);
 
   pic_processor_.getBoxes(frame_, cv_model_output);
 
@@ -43,11 +34,11 @@ std::vector<cv::Rect> VideoProcessor::getPeopleBoxes() {
 }
 
 int VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
-  std::vector<cv::Rect> people_boxes = getPeopleBoxes();
-
+  video_source_->getPicture(frame_);
   if (isEndOfVideo()) {
     return -1;
   }
+  std::vector<cv::Rect> people_boxes = getPeopleBoxes();
 
   size_t people_amount = people_boxes.size();
   int people_in_queue_amount = 0;

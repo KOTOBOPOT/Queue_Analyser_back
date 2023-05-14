@@ -5,7 +5,7 @@
 
 class IVideoSource {
  public:
-  virtual ~IVideoSource();
+  //virtual ~IVideoSource();
   virtual void getPicture(cv::Mat& pic) = 0;
   bool isCaptureOpened();
   bool isEndOfVideo();
