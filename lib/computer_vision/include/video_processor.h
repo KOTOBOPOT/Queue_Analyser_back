@@ -11,13 +11,22 @@ const cv::Rect kDefaultQueueBox = cv::Rect(
     100, 0, 650, 250);  //(100,0)-coordinates of left-up box corner. 100 - shift
                         // from left side, 0 - from top, (650,250) - sides
                         // sizes. 650 - horizontal, 250 - vertical
-
+class queueVidSource {
+ public:
+  queueVidSource(std::shared_ptr<IVideoSource> vid_source, const cv::Rect& queue_box)
+      : vid_source_(vid_source), queue_box_(queue_box) {}
+   queueVidSource(std::shared_ptr<IVideoSource> vid_source)
+      : vid_source_(vid_source), queue_box_(kDefaultQueueBox) {}
+ 
+  cv::Rect queue_box_;
+  std::shared_ptr<IVideoSource> vid_source_;
+};
 class VideoProcessor {
  public:
-  VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
-                 const cv::Rect& queue_box = kDefaultQueueBox);
+  VideoProcessor(std::vector<queueVidSource>
+                     vid_sources);
 
-  int getQueuePeopleAmount();
+  std::vector<int> getQueuePeopleAmount();
   void setCudaState(bool cuda_state);
 
  public:

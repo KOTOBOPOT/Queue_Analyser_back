@@ -16,8 +16,9 @@ add_library(computer_vision
 )
 
 # Покдлючение всех hpp файлов в директории include/
-target_link_libraries(computer_vision PUBLIC ${OpenCV_LIBS})
 target_include_directories(computer_vision PUBLIC 
                                 ${CMAKE_CURRENT_SOURCE_DIR}/include
                                 ${GTEST_INCLUDE_DIRS}
 )
+target_link_libraries(computer_vision PUBLIC ${OpenCV_LIBS})
+

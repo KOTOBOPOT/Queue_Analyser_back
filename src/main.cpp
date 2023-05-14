@@ -4,16 +4,17 @@
 
 #include "routes.h"
 #include "server.h"
+#include "vid_process.h"
 int main(int argc, char* argv[]) {
-
-    // std::shared_ptr<IVideoSource> vid_src = std::make_shared<FileVideo>("../static/video_examples/ex1.mp4",2);//2 - это кол-во секунд, которое мы пропускаем
-    // //std::shared_ptr<IVideoSource> vid_src = std::make_shared<CamVideo>(0);
+    //auto vid_processor = getVideoProcessor(0);
+    auto vid_processor = getVideoProcessor("../static/video_examples/ex1.mp4",2);
     
-    // VideoProcessor vp = VideoProcessor(vid_src);
-    // for (int i = 0; i < 100; ++i) {
-    //   std::cout << i << " step . Current people amount from videosource: "
-    //             << vp.getQueuePeopleAmount() << std::endl; //Если видео кончилось, возращает -1
-    // }
+    for (int i = 0; i < 100; ++i) {
+      std::cout << i << " step . Current people amount from videosource: "
+                << vid_processor->getQueuePeopleAmount()[0] << std::endl; //Если видео кончилось, возращает -1
+    }//[0] значит, что для первой видеозаписи(getQueuePeopleAmount возращает вектор специально, задел на будущее под несколько записей)
+
+
 
   auto rt = getRouter();
   Server tst(*rt);

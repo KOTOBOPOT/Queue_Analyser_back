@@ -5,9 +5,12 @@
 
 #include "cam_video.h"
 #include "file_video.h"
-VideoProcessor::VideoProcessor(std::vector<std::shared_ptr<IVideoSource>> vid_source,
-                               const cv::Rect& queue_box)
-    : video_source_(vid_source), queue_box_(queue_box) {}
+VideoProcessor::VideoProcessor(std::vector<queueVidSource> vid_sources) {
+  video_source_ =
+      vid_sources[0].vid_source_;  // Пока для одного объекта сделал, потом
+                                   // сделаю для нескольких
+  queue_box_ = vid_sources[0].queue_box_;
+}
 
 bool VideoProcessor::isVideoOpened() {
   return video_source_->isCaptureOpened();
@@ -33,10 +36,10 @@ std::vector<cv::Rect> VideoProcessor::getPeopleBoxes() {
   return people_boxes;
 }
 
-int VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
+std::vector<int> VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
   video_source_->getPicture(frame_);
   if (isEndOfVideo()) {
-    return -1;
+    return std::vector<int>{-1};
   }
   std::vector<cv::Rect> people_boxes = getPeopleBoxes();
 
@@ -49,7 +52,7 @@ int VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
       ++people_in_queue_amount;
     }
   }
-  return people_in_queue_amount;
+  return std::vector<int>{people_in_queue_amount};//Пока для одного объекта. Это задел на будущее
 }
 bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
                                    const cv::Rect& queue_box) {

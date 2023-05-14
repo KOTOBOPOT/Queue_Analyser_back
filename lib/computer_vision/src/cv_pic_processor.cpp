@@ -109,5 +109,6 @@ std::vector<std::string> CVPicProcessor::loadClassList() {
   while (getline(ifs, line)) {
     class_list.push_back(line);
   }
+  ifs.close();
   return class_list;
 }
