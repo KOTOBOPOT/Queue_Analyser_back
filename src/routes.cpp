@@ -4,7 +4,6 @@
 
 #include "continuous_nums_to_time_point.h"
 #include "generate_response.h"
-#include "join.h"
 #include "parse_query_string.h"
 #include "router.h"
 #include "sqlite_handler.h"
