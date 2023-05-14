@@ -1,6 +1,6 @@
-#include <opencv2/opencv.hpp>
-
 #include "file_video.h"
+
+#include <opencv2/opencv.hpp>
 
 FileVideo::FileVideo(const std::string& filename, size_t fps, float skip_secs) {
   filename_ = filename;

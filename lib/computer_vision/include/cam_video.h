@@ -5,10 +5,11 @@
 
 class CamVideo final : public IVideoSource {
  public:
-    CamVideo(int cam_index);
-    void getPicture(cv::Mat& pic) override; 
+  CamVideo(int cam_index);
+  void getPicture(cv::Mat& pic) override;
+
  private:
-    int camera_index_;   
+  int camera_index_;
 };
 
 #endif

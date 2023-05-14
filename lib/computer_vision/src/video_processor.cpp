@@ -1,9 +1,10 @@
+#include "video_processor.h"
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 
 #include "cam_video.h"
 #include "file_video.h"
-#include "video_processor.h"
 
 VideoProcessor::VideoProcessor(const std::string& filename, size_t fps,
                                float time_period, const cv::Rect& queue_box) {

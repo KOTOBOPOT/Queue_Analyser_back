@@ -1,7 +1,6 @@
 #ifndef QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_I_VIDEO_SOURCE_H_
 #define QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_I_VIDEO_SOURCE_H_
 
-
 #include <opencv2/opencv.hpp>
 
 class IVideoSource {
@@ -11,9 +10,9 @@ class IVideoSource {
   bool isCaptureOpened();
   bool isEndOfVideo();
 
- public:                      
+ public:
   cv::Mat frame_;             // Current frame
   cv::VideoCapture capture_;  // Video source
 };
 
-#endif 
+#endif
