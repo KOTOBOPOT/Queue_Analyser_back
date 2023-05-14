@@ -23,7 +23,13 @@ add_executable(${PROJECT_NAME}
                     src/routes.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} server computer_vision database_handler tg_bot ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} 
+                        server 
+                        computer_vision 
+                        database_handler 
+                        tg_bot 
+                        ${Boost_LIBRARIES}
+)
 
 
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
