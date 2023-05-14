@@ -4,6 +4,10 @@ set(Boost_USE_STATIC_RUNTIME ON)
 
 find_package(Boost REQUIRED)
 
+enable_testing()
+find_package(GTest REQUIRED)
+add_subdirectory(tests)
+
 # Задание цели
 add_library(server
                     src/parse_query_string.cpp                    
