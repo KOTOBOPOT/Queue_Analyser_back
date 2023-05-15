@@ -12,4 +12,4 @@ class CamVideo final : public IVideoSource {
   int camera_index_;
 };
 
-#endif
+#endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_CAM_VIDEO_H_

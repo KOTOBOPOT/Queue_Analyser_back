@@ -5,7 +5,7 @@
 
 class FileVideo final : public IVideoSource {
  public:
-  FileVideo(const std::string& filename, float skip_secs=0.5);
+  FileVideo(const std::string& filename, float skip_secs = 0.5);
   void getPicture(cv::Mat& pic) override;
 
  private:
@@ -19,4 +19,4 @@ class FileVideo final : public IVideoSource {
   size_t skip_frames_;
 };
 
-#endif
+#endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_FILE_VIDEO_H_

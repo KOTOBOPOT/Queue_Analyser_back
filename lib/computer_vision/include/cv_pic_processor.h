@@ -35,4 +35,4 @@ class CVPicProcessor {
   bool is_cuda_ = false;
 };
 
-#endif
+#endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_CV_PIC_PROCESSOR_H_

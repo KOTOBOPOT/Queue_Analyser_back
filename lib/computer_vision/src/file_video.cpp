@@ -11,9 +11,9 @@ FileVideo::FileVideo(const std::string& filename, float skip_secs) {
   if (!isCaptureOpened()) {
     std::cerr << "Error opening video file\n";
   }
-  fps_ = capture_.get(cv::CAP_PROP_FPS); ;
+  fps_ = capture_.get(cv::CAP_PROP_FPS);
+  ;
   skip_frames_ = fps_ * skip_secs_;
-
 }
 
 void FileVideo::getPicture(cv::Mat& pic) {

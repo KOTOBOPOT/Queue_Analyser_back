@@ -13,18 +13,18 @@ const cv::Rect kDefaultQueueBox = cv::Rect(
                         // sizes. 650 - horizontal, 250 - vertical
 class queueVidSource {
  public:
-  queueVidSource(std::shared_ptr<IVideoSource> vid_source, const cv::Rect& queue_box)
+  queueVidSource(std::shared_ptr<IVideoSource> vid_source,
+                 const cv::Rect& queue_box)
       : vid_source_(vid_source), queue_box_(queue_box) {}
-   queueVidSource(std::shared_ptr<IVideoSource> vid_source)
+  queueVidSource(std::shared_ptr<IVideoSource> vid_source)
       : vid_source_(vid_source), queue_box_(kDefaultQueueBox) {}
- 
+
   cv::Rect queue_box_;
   std::shared_ptr<IVideoSource> vid_source_;
 };
 class VideoProcessor {
  public:
-  VideoProcessor(std::vector<queueVidSource>
-                     vid_sources);
+  VideoProcessor(std::vector<queueVidSource> vid_sources);
 
   std::vector<int> getQueuePeopleAmount();
   void setCudaState(bool cuda_state);
@@ -47,4 +47,4 @@ class VideoProcessor {
   bool is_cuda_ = false;
 };
 
-#endif
+#endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_VIDEO_PROCESSOR_H_

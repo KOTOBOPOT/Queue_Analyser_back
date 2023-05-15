@@ -36,7 +36,8 @@ std::vector<cv::Rect> VideoProcessor::getPeopleBoxes() {
   return people_boxes;
 }
 
-std::vector<int> VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
+std::vector<int>
+VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
   video_source_->getPicture(frame_);
   if (isEndOfVideo()) {
     return std::vector<int>{-1};
@@ -52,7 +53,8 @@ std::vector<int> VideoProcessor::getQueuePeopleAmount() {  // if video had ended
       ++people_in_queue_amount;
     }
   }
-  return std::vector<int>{people_in_queue_amount};//Пока для одного объекта. Это задел на будущее
+  return std::vector<int>{
+      people_in_queue_amount};  // Пока для одного объекта. Это задел на будущее
 }
 bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
                                    const cv::Rect& queue_box) {

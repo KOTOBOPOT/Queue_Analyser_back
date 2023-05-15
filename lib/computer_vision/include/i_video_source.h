@@ -5,7 +5,7 @@
 
 class IVideoSource {
  public:
-  //virtual ~IVideoSource();
+  // virtual ~IVideoSource();
   virtual void getPicture(cv::Mat& pic) = 0;
   bool isCaptureOpened();
   bool isEndOfVideo();
@@ -15,4 +15,4 @@ class IVideoSource {
   cv::VideoCapture capture_;  // Video source
 };
 
-#endif
+#endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_I_VIDEO_SOURCE_H_
