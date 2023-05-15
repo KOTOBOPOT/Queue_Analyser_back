@@ -1,4 +1,4 @@
-#include "vid_process.h"
+#include "video_processors.h"
 
 #include <vector>
 
