@@ -1,9 +1,27 @@
+#include <memory>
+#include <fstream>
+#include <nlohmann/json.hpp>
+
 #include "bot.h"
 
 int main(int argc, char **argv)
 {
 	auto bot = QueueBot::SimpleBot("6216802370:AAHtsAHiNSVm4PZv2r1YZHdQu5ap63LF8kE");
-	auto h = QueueBot::SimpleHandler("test");
-	bot.addKeyboardButton(h, 1, 1);
+
+	std::ifstream file(argv[1]);
+	nlohmann::json menu;
+	file >> menu;
+
+	QueueBot::CreatorChouser chouser;
+	chouser += { "simple_tag", std::make_unique<QueueBot::SimpleCreator>() };
+
+	std::cout << menu.dump() << std::endl;
+
+
+	for (auto& val : menu.at("buttons"))
+	{
+		std::cout << val.dump() << std::endl;
+		bot.addKeyboardButton(chouser.create(val.at("handler")), val.at("row").get<size_t>(), val.at("col").get<size_t>());
+	}
 	bot.run();
 }

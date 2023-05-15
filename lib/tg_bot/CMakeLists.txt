@@ -1,5 +1,8 @@
 add_library(tg_bot  
-                src/bot.cpp                    
+                src/tg_bot.cpp
+                src/bot_handlers.cpp
+                src/handler_creator.cpp
+                src/creator_chouser.cpp
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -12,5 +15,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIR})
 
 target_include_directories(tg_bot PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 
 target_link_libraries(tg_bot database_handler TgBot ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} Threads::Threads)
