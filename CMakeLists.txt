@@ -21,6 +21,7 @@ include_directories(include)
 add_executable(${PROJECT_NAME}  
                     src/main.cpp 
                     src/routes.cpp
+                    src/video_processors.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 
