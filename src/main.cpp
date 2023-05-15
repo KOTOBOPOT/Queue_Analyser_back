@@ -7,25 +7,25 @@
 
 int main(int argc, char* argv[]) {
   auto rt = getRouter();
-  // Создаем второй поток для сервера
+  // Создаем первый поток для сервера
   std::thread server_thread([&rt]() {
     Server tst(*rt);
     // http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000
     tst.run();
   });
 
-  // Создаем первый поток для цикла while(true)
+  // Создаем второй поток для цикла while(true)
   // TODO: Добавить db_handler внутрь video_processor чтобы через него
   // взаимодействовать с бд. Пока костыльно прокидываю роутер
   std::thread video_thread([&rt]() {
     while (true) {
       auto vid_processor =
-          getVideoProcessor("../static/video_examples/ex1.mp4", 2);
+          getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
 
       std::cout << "Reopen video..." << std::endl;
       int amount = 0;
       while ((amount = vid_processor->getQueuePeopleAmount()[0]) != -1) {
-        // std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         std::cout << "Current people amount from videosource: " << amount
                   << std::endl;  // Если видео кончилось, возращает -1
         //[0] значит, что для первой видеозаписи(getQueuePeopleAmount возращает
