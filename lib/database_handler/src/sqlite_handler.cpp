@@ -24,12 +24,11 @@
  * не существует, будет создан новый, однако настраивать БД придется отдельно)
  */
 SQLiteHandler::SQLiteHandler(const std::string &db_path) : db_(nullptr) {
-  int rc = sqlite3_open_v2(db_path.c_str(), &db_, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX,
-                           nullptr);
+  int rc = sqlite3_open(db_path.c_str(), &db_);
   if (rc) {
     sqlite3_close(db_);
     throw DBAccessException("Cannot connect to database: " +
-        std::string(sqlite3_errmsg(db_)));
+                            std::string(sqlite3_errmsg(db_)));
   }
 }
 
@@ -47,7 +46,7 @@ std::string SQLiteHandler::toISO8061(const time_point &time) {
       std::chrono::duration_cast<std::chrono::seconds>(time_since_epoch);
   auto milliseconds =
       std::chrono::duration_cast<std::chrono::milliseconds>(time_since_epoch) -
-          seconds_since_epoch;
+      seconds_since_epoch;
 
   std::time_t tt = std::chrono::system_clock::to_time_t(time);
   std::tm tm = *std::localtime(&tt);
@@ -80,7 +79,7 @@ std::vector<int> SQLiteHandler::selectEntriesOverInterval(
   int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
     throw QueryPreparationException("Failed to prepare the statement: " +
-        std::string(sqlite3_errmsg(db_)));
+                                    std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_text(stmt, 1, toISO8061(start).c_str(), -1, SQLITE_TRANSIENT);
@@ -111,7 +110,7 @@ int SQLiteHandler::selectLastEntry(int room_id) const {
   int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
     throw QueryPreparationException("Failed to prepare the statement: " +
-        std::string(sqlite3_errmsg(db_)));
+                                    std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_int(stmt, 1, room_id);
@@ -139,7 +138,7 @@ std::vector<int> SQLiteHandler::selectAllRooms() const {
   int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
     throw QueryPreparationException("Failed to prepare the statement: " +
-        std::string(sqlite3_errmsg(db_)));
+                                    std::string(sqlite3_errmsg(db_)));
   }
 
   while (sqlite3_step(stmt) == SQLITE_ROW) {
@@ -167,7 +166,7 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
   int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
   if (rc != SQLITE_OK) {
     throw QueryPreparationException("Failed to prepare the statement: " +
-        std::string(sqlite3_errmsg(db_)));
+                                    std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_bind_text(stmt, 1, toISO8061(time).c_str(), -1, SQLITE_TRANSIENT);
@@ -177,13 +176,13 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
   rc = sqlite3_step(stmt);
   if (rc != SQLITE_DONE) {
     throw QueryExecutionException("Failed to prepare the statement: " +
-        std::string(sqlite3_errmsg(db_)));
+                                  std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_finalize(stmt);
 }
 
-template<typename Iterator>
+template <typename Iterator>
 std::string join(Iterator begin, Iterator end, char separator = '.') {
   std::ostringstream o;
   if (begin != end) {

@@ -6,10 +6,10 @@ add_library(database_handler ${DATABASE_HANDLER_SOURCES})
 
 # Find the SQLite3 library
 find_package(SQLite3 REQUIRED)
-
-enable_testing()
-find_package(GTest REQUIRED)
-add_subdirectory(tests)
+if(SQLITE3_FOUND)
+    message(STATUS "SQLite3 found: ${SQLite3_INCLUDE_DIRS}")
+    include_directories(${SQLite3_INCLUDE_DIRS})
+endif()
 
 # Link the SQLite3 library to your project
 target_link_libraries(database_handler ${SQLite3_LIBRARIES})

@@ -21,23 +21,14 @@ include_directories(include)
 add_executable(${PROJECT_NAME}  
                     src/main.cpp 
                     src/routes.cpp
-                    src/video_processors.cpp
 )
-
-
 add_executable(tgBot
                     src/tgbot_main.cpp
 )
+
+target_link_libraries(${PROJECT_NAME} server computer_vision database_handler ${Boost_LIBRARIES})
 target_link_libraries(tgBot tg_bot database_handler)
 
-
-target_link_libraries(${PROJECT_NAME} 
-                        server 
-                        computer_vision 
-                        database_handler 
-                        #tg_bot 
-                        ${Boost_LIBRARIES}
-)
 # target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
 
 # target_include_directories(${PROJECT_NAME}

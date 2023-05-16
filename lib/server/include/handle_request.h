@@ -7,6 +7,8 @@
 #include "router.h"
 #include "types.h"
 
+static int result = 0;
+
 // This function produces an HTTP response for the given
 // request. The type of the response object depends on the
 // contents of the request, so the interface requires the
