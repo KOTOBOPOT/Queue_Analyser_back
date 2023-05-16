@@ -1,0 +1,21 @@
+{ "buttons": [ {
+			"handler": {
+				"class_tag": "simple_tag",
+				"token": "test",
+				"data": "data test",
+				"help": "test"
+			},
+			"row": 1,
+			"col": 1
+		}, {
+			"handler": {
+				"class_tag": "simple_tag",
+				"token": "test2",
+				"data": "data test2",
+				"help": "test"
+			},
+			"row": 2,
+			"col": 1
+		}
+	]
+}
