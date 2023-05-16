@@ -1,18 +1,18 @@
 { "buttons": [ {
 			"handler": {
-				"class_tag": "simple_tag",
-				"token": "test",
-				"data": "data test",
-				"help": "test"
+				"class_tag": "current_data_tag",
+				"token": "Текущее количество человек",
+				"data": "Текущее количество человек в очереди - %1",
+				"help": "Показывает текущее количество человек в очереди"
 			},
 			"row": 1,
 			"col": 1
 		}, {
 			"handler": {
 				"class_tag": "simple_tag",
-				"token": "test2",
-				"data": "data test2",
-				"help": "test"
+				"token": "Помощь",
+				"data": "/start запустить бота\nТекущее количество человек - текущее количество человек в очереди",
+				"help": "Показывает помощь"
 			},
 			"row": 2,
 			"col": 1

@@ -4,6 +4,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 
+#include "sqlite_handler.h"
 #include "bot_handlers.h"
 
 namespace QueueBot {
@@ -19,6 +20,14 @@ class IHandlerCreator {
 class SimpleCreator : public IHandlerCreator {
  public:
   IBotHandler::Ptr create(nlohmann::json handlerData) override;
+};
+
+class CurrentDataCreator : public IHandlerCreator {
+ public:
+  CurrentDataCreator(std::shared_ptr<IDataSource> database);
+  IBotHandler::Ptr create(nlohmann::json handlerData) override;
+ private:
+  std::shared_ptr<IDataSource> _database;
 };
 }  // namespace QueueBot
 

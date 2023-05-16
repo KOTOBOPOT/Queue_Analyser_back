@@ -12,8 +12,12 @@ int main(int argc, char** argv) {
   nlohmann::json menu;
   file >> menu;
 
+  std::shared_ptr<IDataSource> db = std::make_unique<SQLiteHandler>("../db/db.db");
+
   QueueBot::CreatorChouser chouser;
   chouser += {"simple_tag", std::make_unique<QueueBot::SimpleCreator>()};
+  chouser += 
+      {"current_data_tag", std::make_unique<QueueBot::CurrentDataCreator>(db)};
 
   std::cout << menu.dump() << std::endl;
 

@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 
+#include "sqlite_handler.h"
+
 namespace QueueBot {
 class IBotHandler {
  public:
@@ -34,6 +36,24 @@ class SimpleHandler : public IBotHandler {
   std::string _message;
   std::string _help;
 };
+
+class CurrentDataHandler : public IBotHandler {
+ public:
+  CurrentDataHandler(std::string token, std::string msg, std::string help, 
+                     std::shared_ptr<IDataSource> database);
+
+  std::string getHandlerString() override;
+  bool isHandler(const TgBot::Message::Ptr msg) override;
+  void sendMessage(const TgBot::Bot& bot, TgBot::Message::Ptr msg) override;
+  std::string getHelp() override;
+
+ private:
+  std::string _value;
+  std::string _message;
+  std::string _help;
+  std::shared_ptr<IDataSource> _database;
+};
+
 }  // namespace QueueBot
 
 #endif  // QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_BOT_HANDLERS_H_

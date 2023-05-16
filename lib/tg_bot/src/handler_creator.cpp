@@ -7,4 +7,15 @@ IBotHandler::Ptr SimpleCreator::create(nlohmann::json handlerData) {
       handlerData.at("data").get<std::string>(),
       handlerData.at("help").get<std::string>());
 }
+
+CurrentDataCreator::CurrentDataCreator(std::shared_ptr<IDataSource> database) 
+  : _database(database) {}
+
+IBotHandler::Ptr CurrentDataCreator::create(nlohmann::json handlerData) {
+  return std::make_unique<CurrentDataHandler>(
+      handlerData.at("token").get<std::string>(),
+      handlerData.at("data").get<std::string>(),
+      handlerData.at("help").get<std::string>(),
+      _database);
+}
 }  // namespace QueueBot
