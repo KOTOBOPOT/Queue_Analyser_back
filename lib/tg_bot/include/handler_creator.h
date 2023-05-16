@@ -8,21 +8,21 @@
 
 namespace QueueBot
 {
-	class IHandlerCreator
-	{
-	public:
-		using Ptr = std::shared_ptr<IHandlerCreator>;
-		IHandlerCreator() = default;
-		~IHandlerCreator() = default;
-		 
-		virtual IBotHandler::Ptr create(nlohmann::json handlerData) = 0;
-	};
+  class IHandlerCreator
+  {
+  public:
+    using Ptr = std::shared_ptr<IHandlerCreator>;
+    IHandlerCreator() = default;
+    ~IHandlerCreator() = default;
+     
+    virtual IBotHandler::Ptr create(nlohmann::json handlerData) = 0;
+  };
 
-	class SimpleCreator : public IHandlerCreator
-	{
-	public:
-		IBotHandler::Ptr create(nlohmann::json handlerData) override;
-	};
+  class SimpleCreator : public IHandlerCreator
+  {
+  public:
+    IBotHandler::Ptr create(nlohmann::json handlerData) override;
+  };
 }
 
 #endif // QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_HANDLER_CREATOR_H_
