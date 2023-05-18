@@ -24,27 +24,37 @@ int main(int argc, char* argv[]) {
     while (true) {
       // auto vid_processor =
       //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
-      auto vid_processor = getVideoProcessor();
-      std::shared_ptr<FileVideo> fv1 =
-          std::make_shared<FileVideo>("../static/video_examples/ex1.mp4", 0.1);
-      std::shared_ptr<FileVideo> fv2 =
-          std::make_shared<FileVideo>("../static/video_examples/sample.mp4", 1);
 
-      vid_processor->pushBackVideoSource(fv1);
-      vid_processor->pushBackVideoSource(fv2, cv::Rect(0, 0, 950, 950));
+      auto vid_processor = getVideoProcessor();
+
+      std::shared_ptr<FileVideo> fv1 =
+          std::make_shared<FileVideo>("../static/video_examples/ex1.mp4", 0.5);
+      std::shared_ptr<FileVideo> fv2 = std::make_shared<FileVideo>(
+          "../static/video_examples/sample.mp4", 0.1);
+      std::shared_ptr<CamVideo> fv3 = std::make_shared<CamVideo>(0);
+
+      vid_processor->pushBackVideoSource(
+          fv1);  // Добавляем в видео_процессор источники для видео
+      vid_processor->pushBackVideoSource(
+          fv2, cv::Rect(10, 50, 500,
+                        500));  // можно также указывать прямоугольник очереди
+      vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
+
+      vid_processor->setVisualizeVidSourceIndex(
+          2);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
+               // pushBackVideoSource().  В данном случае выводится видео с веб
+               // камеры ноутбука
 
       std::cout << "Reopen video..." << std::endl;
       std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
       while (((people_amounts[0]) != -1) || (people_amounts[1] != -1)) {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << "Current people amount from first videosource: "
                   << people_amounts[0]
                   << ". From second videosource: " << people_amounts[1]
+                  << ". From third: " << people_amounts[2]
                   << std::endl;  // Если видео кончилось, возращает -1
 
-        //[0] значит, что для первой видеозаписи(getQueuePeopleAmount
-        // возращает
-        // вектор специально, задел на будущее под несколько записей)
         auto time_now = std::chrono::system_clock::now();
         rt->db_handler_->insertEntry(people_amounts[0], time_now, 1);
         people_amounts = vid_processor->getQueuePeopleAmount();

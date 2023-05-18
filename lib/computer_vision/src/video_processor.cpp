@@ -5,6 +5,7 @@
 
 #include "cam_video.h"
 #include "file_video.h"
+#include "frame_visualizer.h"
 
 VideoProcessor::VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
                                const cv::Rect queue_box) {
@@ -12,9 +13,9 @@ VideoProcessor::VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
   queue_video_sources_.push_back(queue_vid_source);
 }
 
- void VideoProcessor::setVisualizeVidSourceIndex(int vid_source_index){
+void VideoProcessor::setVisualizeVidSourceIndex(int vid_source_index) {
   visualize_vid_source_index_ = vid_source_index;
- }
+}
 
 void VideoProcessor::pushBackVideoSource(
     std::shared_ptr<IVideoSource> vid_source, cv::Rect queue_box) {
@@ -52,6 +53,10 @@ VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
   if (queue_video_sources_.empty()) {
     return std::vector<int>{};
   }
+
+  std::vector<cv::Rect> people_in_queue;
+  std::vector<cv::Rect> people_not_in_queue;
+
   for (int i = 0; i < queue_video_sources_.size(); ++i) {
     video_source_ = queue_video_sources_[i].video_source_;
     queue_box_ = queue_video_sources_[i].queue_box_;
@@ -66,11 +71,24 @@ VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
     int people_amount = people_boxes.size();
     int people_in_queue_amount = 0;
 
-    for (int i = 0; i < people_amount; ++i) {
-      auto people_box = people_boxes[i];//visualize_vid_source_index_
-      if (isPersonInBox(people_box)) {
-        ++people_in_queue_amount;
+    if (visualize_vid_source_index_ != i) {  // if not need to visualize
+      for (int j = 0; j < people_amount; ++j) {
+        auto people_box = people_boxes[j];
+        if (isPersonInBox(people_box, queue_box_)) {
+          ++people_in_queue_amount;
+        }
       }
+    } else {
+      for (int j = 0; j < people_amount; ++j) {
+        cv::Rect person_box = people_boxes[j];
+        if (isPersonInBox(person_box, queue_box_)) {
+          ++people_in_queue_amount;
+          people_in_queue.push_back(person_box);
+          continue;
+        }
+        people_not_in_queue.push_back(person_box);
+      }
+      visualize_queue(frame_, people_in_queue, people_not_in_queue, queue_box_);
     }
 
     people_amount_vec.push_back(
@@ -93,8 +111,13 @@ bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
       cv::Point(person_box_x + person_box_width, person_box_y);
   cv::Point right_down_point = cv::Point(person_box_x + person_box_width,
                                          person_box_y + person_box_height);
+  cv::Point center_point = cv::Point(person_box_x + person_box_width / 2,
+                                     person_box_y + person_box_height / 2);
+  cv::Point left_middle_point = cv::Point(person_box_x,
+                                          person_box_y + person_box_height / 2);
+  cv::Point right_middle_point = cv::Point(person_box_x + person_box_width,
+                                          person_box_y + person_box_height / 2);
 
-  // bool contains_at_least_one_point = false;
   bool contains_at_least_one_point = queue_box.contains(left_up_point);
   contains_at_least_one_point =
       contains_at_least_one_point | queue_box.contains(left_down_point);
@@ -102,6 +125,13 @@ bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
       contains_at_least_one_point | queue_box.contains(right_up_point);
   contains_at_least_one_point =
       contains_at_least_one_point | queue_box.contains(right_down_point);
+  contains_at_least_one_point =
+      contains_at_least_one_point | queue_box.contains(center_point);
+  contains_at_least_one_point =
+      contains_at_least_one_point | queue_box.contains(left_middle_point);
+  contains_at_least_one_point =
+      contains_at_least_one_point | queue_box.contains(right_middle_point);
+
   return contains_at_least_one_point;
 }
 

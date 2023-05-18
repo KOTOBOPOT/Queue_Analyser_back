@@ -13,10 +13,6 @@ const cv::Rect kDefaultQueueBox = cv::Rect(
 // from left side, 0 - from top, (650,250) - sides
 // sizes. 650 - horizontal, 250 - vertical
 
-const std::vector<cv::Scalar> kVisualizeColors = {
-    cv::Scalar(255, 255, 0), cv::Scalar(0, 255, 0), cv::Scalar(0, 255, 255),
-    cv::Scalar(255, 0, 0)};
-    
 class queueVidSource {
  public:
   queueVidSource(std::shared_ptr<IVideoSource> vid_source,
