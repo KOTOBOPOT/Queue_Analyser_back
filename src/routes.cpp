@@ -1,6 +1,7 @@
 #include "routes.h"
 
 #include <memory>
+#include <nlohmann/json.hpp>
 
 #include "continuous_nums_to_time_point.h"
 #include "generate_response.h"
@@ -8,6 +9,7 @@
 #include "router.h"
 #include "sqlite_handler.h"
 
+using json = nlohmann::json;
 using Response = Router::Response;
 using Request = Router::Request;
 
@@ -31,10 +33,16 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
       auto start = continuous_nums_to_datetime(params["start"]);
 
       auto end = continuous_nums_to_datetime(params["end"]);
-      auto entries = StringResponse(
-          rt->db_handler_->selectEntriesOverIntervalString(start, end));
 
-      return generateResponse(req, entries);
+      // Create a JSON object
+      json jsonObj;
+
+      jsonObj["entries"] =
+          rt->db_handler_->selectEntriesOverIntervalString(start, end);
+      // Convert the JSON object to a string
+      auto jsonStr = JsonResponse(jsonObj.dump());
+
+      return generateResponse(req, jsonStr);
     } catch (const std::exception& e) {
       auto msg = StringResponse(e.what());
       return generateResponse(req, msg,
@@ -43,16 +51,43 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
   });
 
   rt->addHandler("GET", "/getCurrentValue", [](const Request& req) -> Response {
-    static int result = 0;
-    if (rand() % 2 || result == 0) {
-      result += 5;
+    // Your code here
+    static int peopleAmount = 10;  // Example value
+    if (rand() % 2 || peopleAmount == 0) {
+      peopleAmount += 5;
     } else {
-      result -= 1;
+      peopleAmount -= 1;
     }
-    result %= 25;
-    auto content = StringResponse(std::to_string(result));
+    peopleAmount %= 25;
+    // Create a JSON object
+    json jsonObj;
+    jsonObj["time"] = peopleAmount;
 
-    return generateResponse(req, content);
+    // Generate the response using the JSON object
+    auto jsonStr = JsonResponse(jsonObj.dump());
+    return generateResponse(req, jsonStr);
+  });
+
+  rt->addHandler("GET", "/getTestArray", [](const Request& req) -> Response {
+    // Your code here
+    static int Test = 10;  // Example value
+    if (rand() % 2 || Test == 0) {
+      Test += 5;
+    } else {
+      Test -= 1;
+    }
+    Test %= 25;
+
+    // Create a JSON array
+    json jsonArray;
+    for (int i = 0; i < 5; i++) {
+        json obj;
+        obj["22:01:00"] = Test + i;
+        jsonArray.push_back(obj);
+    }
+    // Generate the response using the JSON object
+    auto jsonStr = JsonResponse(jsonArray.dump());
+    return generateResponse(req, jsonStr);
   });
 
   return rt;
