@@ -49,3 +49,11 @@ TEST(PathCat, BothNonEmpty) {
   auto result = path_cat(base, path);
   EXPECT_EQ(result, "/path/to/base/file.html");
 }
+
+// Оба пути непустые, при этом base оканчивается '/'
+TEST(PathCat, BaseWithSlashEnd) {
+  boost::beast::string_view base = "/path/to/base/";
+  boost::beast::string_view path = "/file.html";
+  auto result = path_cat(base, path);
+  EXPECT_EQ(result, "/path/to/base/file.html");
+}
