@@ -15,8 +15,10 @@ add_subdirectory(lib/database_handler)
 add_subdirectory(lib/tg_bot)
 
 find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(include)
+include_directories(include ${Boost_INCLUDE_DIRS})
+
+find_package(GTest REQUIRED)# Почему-то если добавляю в главный  СMakeLists, то он его не видит
+enable_testing()
 
 add_executable(${PROJECT_NAME}  
                     src/main.cpp 
@@ -32,18 +34,3 @@ target_link_libraries(${PROJECT_NAME}
                         pthread
                         ${Boost_LIBRARIES}
 )
-
-
-# target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
-
-# target_include_directories(${PROJECT_NAME}
-    # PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
-#     ${CMAKE_CURRENT_SOURCE_DIR}/include/ml
-#     ${CMAKE_CURRENT_SOURCE_DIR}/include/server
-#     # Добавьте здесь все подключенные заголовочные файлы
-# )
-
-# set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-# set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-# # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-# include(CPack)
