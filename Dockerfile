@@ -1,11 +1,8 @@
 # Base image
 FROM ubuntu:latest
 
-# Prevents prompts from apt during build
-ARG DEBIAN_FRONTEND=noninteractive
-
-# Update and install dependencies
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+# Устанавливаем зависимости
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
     git \
     cmake \
@@ -18,14 +15,16 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     libavformat-dev \
     libswscale-dev \
     python3-opencv \
-    libopencv-dev && rm -rf /var/lib/apt/lists/*
+    libopencv-dev
 
-# Copy project files
-WORKDIR /app
+# Копируем файлы проекта внутрь образа
 COPY . /app
 
-# Build the project
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Собираем и устанавливаем проект
 RUN mkdir build && cd build && cmake .. && make
 
-# Set the entry point
+# Запускаем приложение при запуске контейнера
 CMD ["./build/queueAnalyser"]
