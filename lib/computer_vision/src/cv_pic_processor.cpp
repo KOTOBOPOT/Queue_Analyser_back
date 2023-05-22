@@ -104,7 +104,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 
 std::vector<std::string> CVPicProcessor::loadClassList() {
   std::vector<std::string> class_list;
-  std::ifstream ifs("/app/static/model/classes.txt");
+  std::ifstream ifs("../static/model/classes.txt");
   std::string line;
   while (getline(ifs, line)) {
     class_list.push_back(line);

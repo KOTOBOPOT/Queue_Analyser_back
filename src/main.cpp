@@ -1,5 +1,4 @@
 #include <iostream>
-#include <filesystem>
 #include <thread>
 
 #include "routes.h"
@@ -7,13 +6,6 @@
 #include "video_processors.h"
 
 int main(int argc, char* argv[]) {
-  //  Print cwd and it's contents
-  std::filesystem::path cwd = std::filesystem::current_path();
-  std::cout << "Current working directory: " << cwd.string() << std::endl;
-  std::cout << "\nDirectory contents: " << std::endl;
-  for (const auto & entry : std::filesystem::directory_iterator(cwd.string()))
-    std::cout << entry.path() << std::endl;
-
   auto rt = getRouter();
   // Создаем первый поток для сервера
   std::thread server_thread([&rt]() {
