@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
   // TODO: Добавить db_handler внутрь video_processor чтобы через него
   // взаимодействовать с бд. Пока костыльно прокидываю роутер
   std::thread video_thread([&rt]() {
+    SQLiteHandler db_handler("../db/db.db");
     while (true) {
       // auto vid_processor =
       //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
@@ -56,7 +57,13 @@ int main(int argc, char* argv[]) {
                   << std::endl;  // Если видео кончилось, возращает -1
 
         auto time_now = std::chrono::system_clock::now();
-        rt->db_handler_->insertEntry(people_amounts[0], time_now, 1);
+
+        for (int vid_index = 0; vid_index < people_amounts.size();
+             ++vid_index) {
+          db_handler.insertEntry(people_amounts[vid_index], time_now,
+                                 vid_index);
+        }
+
         people_amounts = vid_processor->getQueuePeopleAmount();
       }
     }
