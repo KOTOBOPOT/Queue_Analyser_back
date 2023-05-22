@@ -7,6 +7,9 @@ using Request = Router::Request;
 
 struct StringResponse : public std::string {
   static constexpr const char* contentType = "text/plain";
+  StringResponse() : std::string() {}
+  explicit StringResponse(const std::string& str) : std::string(str) {}
+  explicit StringResponse(std::string&& str) : std::string(std::move(str)) {}
 };
 
 template <typename T>

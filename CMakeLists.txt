@@ -28,7 +28,8 @@ target_link_libraries(${PROJECT_NAME}
                         server 
                         computer_vision 
                         database_handler 
-                        tg_bot 
+                        tg_bot
+                        pthread
                         ${Boost_LIBRARIES}
 )
 

@@ -1,5 +1,6 @@
 #include "router.h"
 
+#include <boost/beast/http.hpp>
 #include <boost/beast.hpp>
 #include <iostream>
 #include <optional>
