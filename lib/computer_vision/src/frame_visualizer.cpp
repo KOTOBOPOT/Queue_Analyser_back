@@ -16,5 +16,4 @@ void visualize_queue(cv::Mat& frame, std::vector<cv::Rect> people_in_queue,
 
   cv::imshow("output", frame);
   cv::waitKey(1);  // need for imshow method working
-  // cv::pollKey();
 }
