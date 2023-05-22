@@ -1,5 +1,5 @@
 # Base image
-FROM ubuntu:20.04
+FROM ubuntu:latest
 
 # Prevents prompts from apt during build
 ARG DEBIAN_FRONTEND=noninteractive
