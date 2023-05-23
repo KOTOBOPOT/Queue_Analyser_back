@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
   auto rt = getRouter();
   // Создаем первый поток для сервера
   std::thread server_thread([&rt]() {
-    Server tst(*rt);
+    Server tst(*rt, "0.0.0.0");
     // http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000
     tst.run();
   });
