@@ -10,7 +10,7 @@ class Server {
  public:
   Server(Router& router, const std::string& address = "127.0.0.1",
          unsigned short port = 8080,
-         const std::string& doc_root = "../src/views", const int threads = 1)
+         const std::string& doc_root = "/app/src/views", const int threads = 1)
       : router_(router),
         address_(boost::asio::ip::make_address(address)),
         port_(port),
