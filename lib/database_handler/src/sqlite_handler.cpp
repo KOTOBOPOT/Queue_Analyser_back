@@ -69,8 +69,7 @@ std::string SQLiteHandler::toISO8061(const time_point &time) {
  * @throws QueryPreparationException Вызывается, если не удается обработать SQL
  * запрос
  */
-std::vector<int> SQLiteHandler::selectEntriesOverInterval(
-    const time_point &start, const time_point &end) const {
+std::vector<int> SQLiteHandler::selectEntriesOverInterval(const time_point &start, const time_point &end) const {
   std::vector<int> results{};
   sqlite3_stmt *stmt;
   std::string query =
@@ -92,6 +91,36 @@ std::vector<int> SQLiteHandler::selectEntriesOverInterval(
   sqlite3_finalize(stmt);
 
   return results;
+}
+
+nlohmann::json SQLiteHandler::selectEntriesOverIntervalJSON(const time_point &start, const time_point &end) const {
+  nlohmann::json results{};
+  results["data"] = nlohmann::json::array();
+
+  sqlite3_stmt *stmt;
+  std::string query =
+      "SELECT timestamp, size FROM QueueSnapshots WHERE timestamp BETWEEN ? AND ? ORDER "
+      "BY timestamp ASC;";
+
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    throw QueryPreparationException("Failed to prepare the statement: " +
+        std::string(sqlite3_errmsg(db_)));
+  }
+
+  sqlite3_bind_text(stmt, 1, toISO8061(start).c_str(), -1, SQLITE_TRANSIENT);
+  sqlite3_bind_text(stmt, 2, toISO8061(end).c_str(), -1, SQLITE_TRANSIENT);
+
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    auto time= std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+    int size = sqlite3_column_int(stmt, 1);
+    nlohmann::json row = {{"time", time}, {"amount", size}};
+    results["data"].push_back(row);
+  }
+  sqlite3_finalize(stmt);
+
+  return results;
+  return nlohmann::json{};
 }
 
 /**
