@@ -15,7 +15,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libavformat-dev \
     libswscale-dev \
     python3-opencv \
-    libopencv-dev
+    libopencv-dev \
+    nlohmann-json3-dev
 
 # Копируем файлы проекта внутрь образа
 COPY . /app
@@ -24,7 +25,7 @@ COPY . /app
 WORKDIR /app
 
 # Собираем и устанавливаем проект
-RUN mkdir build && cd build && cmake .. && make
+RUN mkdir build && cd build && cmake -DCMAKE_INCLUDE_PATH=/usr/include/nlohmann .. && make
 
 # Запускаем приложение при запуске контейнера
 CMD ["./build/queueAnalyser"]
