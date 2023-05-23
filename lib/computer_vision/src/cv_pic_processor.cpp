@@ -9,7 +9,7 @@ CVPicProcessor::CVPicProcessor() {
 }
 
 void CVPicProcessor::loadNet(cv::dnn::Net &net, bool is_cuda) {
-  auto result = cv::dnn::readNet("../static/model/yolov5s.onnx");
+  auto result = cv::dnn::readNet("/app/static/model/yolov5s.onnx");
   if (is_cuda_) {
     // Attempt to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
