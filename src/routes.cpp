@@ -45,12 +45,27 @@ std::unique_ptr<Router> getRouter(const std::string& path_to_db) {
     }
   });
 
-  rt->addHandler("GET", "/getCurrentValue", [&rt](const Request& req) -> Response {
-    // TODO Сюда добавить запрос на выдачу последней записи о столовой
-    json jsonObj = rt->db_handler_->selectEntriesOverIntervalJSON(continuous_nums_to_datetime("20230524000000000"), continuous_nums_to_datetime("20230530235900000"));
+  rt->addHandler("GET", "/getCurrentValue", [&rt](const Request& req) {
+    try {
+      auto params = parseQueryString(req.target().to_string());
 
-    auto jsonStr = JsonResponse(jsonObj.dump());
-    return generateResponse(req, jsonStr);
+      if (params.find("id") == params.end()) {
+        StringResponse msg("Missing required parameter 'id'");
+        return generateResponse(req, msg,
+                                boost::beast::http::status::bad_request);
+      }
+
+      int id = std::stoi(params["id"]);
+      // Convert the JSON object to a string
+      json jsonObj = rt->db_handler_->selectLastEntryJSON(id);
+      auto jsonStr = JsonResponse(jsonObj.dump());
+
+      return generateResponse(req, jsonStr);
+    } catch (const std::exception& e) {
+      auto msg = StringResponse(e.what());
+      return generateResponse(req, msg,
+                              boost::beast::http::status::bad_request);
+    }
   });
 
   return rt;
