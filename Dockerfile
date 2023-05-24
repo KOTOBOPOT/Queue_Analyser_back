@@ -15,7 +15,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libavformat-dev \
     libswscale-dev \
     python3-opencv \
-    libopencv-dev
+    libopencv-dev \
+    nlohmann-json3-dev
 
 # Копируем файлы проекта внутрь образа
 COPY . /app
