@@ -147,7 +147,7 @@ nlohmann::json SQLiteHandler::selectLastEntryJSON(int room_id) const {
     nlohmann::json entry{};
     entry["time"] = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
     entry["amount"] = sqlite3_column_int(stmt, 1);
-    result[room_id] = entry;
+    result[std::to_string(room_id)] = entry;
   }
 
   sqlite3_finalize(stmt);
