@@ -6,13 +6,14 @@ add_library(database_handler ${DATABASE_HANDLER_SOURCES})
 
 # Find the SQLite3 library
 find_package(SQLite3 REQUIRED)
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
 enable_testing()
 find_package(GTest REQUIRED)
 add_subdirectory(tests)
 
 # Link the SQLite3 library to your project
-target_link_libraries(database_handler ${SQLite3_LIBRARIES})
+target_link_libraries(database_handler ${SQLite3_LIBRARIES} nlohmann_json::nlohmann_json)
 
 # Покдлючение всех .h файлов в директории include/
 target_include_directories(database_handler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
