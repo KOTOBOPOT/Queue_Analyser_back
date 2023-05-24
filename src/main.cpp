@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
   auto rt = getRouter();
   // Создаем первый поток для сервера
   std::thread server_thread([&rt]() {
-    Server tst(*rt);
+    Server tst(*rt, "0.0.0.0");
     // http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000
     tst.run();
   });
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   // TODO: Добавить db_handler внутрь video_processor чтобы через него
   // взаимодействовать с бд. Пока костыльно прокидываю роутер
   std::thread video_thread([&rt]() {
-    SQLiteHandler db_handler("../db/db.db");
+    SQLiteHandler db_handler("/app/db/db.db");
     while (true) {
       // auto vid_processor =
       //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
@@ -29,9 +29,9 @@ int main(int argc, char* argv[]) {
       auto vid_processor = getVideoProcessor();
 
       std::shared_ptr<FileVideo> fv1 =
-          std::make_shared<FileVideo>("../static/video_examples/ex1.mp4", 0.5);
+          std::make_shared<FileVideo>("/app/static/video_examples/ex1.mp4", 0.5);
       std::shared_ptr<FileVideo> fv2 = std::make_shared<FileVideo>(
-          "../static/video_examples/sample.mp4", 0.1);
+          "/app/static/video_examples/sample.mp4", 0.1);
       std::shared_ptr<CamVideo> fv3 = std::make_shared<CamVideo>(0);
 
       vid_processor->pushBackVideoSource(
