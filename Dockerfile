@@ -25,7 +25,7 @@ COPY . /app
 WORKDIR /app
 
 # Собираем и устанавливаем проект
-RUN mkdir build && cd build && cmake -DCMAKE_INCLUDE_PATH=/usr/include/nlohmann .. && make
+RUN mkdir build && cd build && cmake .. && make
 
 # Запускаем приложение при запуске контейнера
 CMD ["./build/queueAnalyser"]
