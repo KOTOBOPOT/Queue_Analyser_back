@@ -95,7 +95,6 @@ std::vector<int> SQLiteHandler::selectEntriesOverInterval(const time_point &star
 
 nlohmann::json SQLiteHandler::selectEntriesOverIntervalJSON(const time_point &start, const time_point &end) const {
   nlohmann::json results{};
-  results["data"] = nlohmann::json::array();
 
   sqlite3_stmt *stmt;
   std::string query =
@@ -130,6 +129,7 @@ nlohmann::json SQLiteHandler::selectEntriesOverIntervalJSON(const time_point &st
 
 nlohmann::json SQLiteHandler::selectLastEntryJSON(int room_id) const {
   nlohmann::json result{};
+
   sqlite3_stmt *stmt;
   std::string query =
       "SELECT timestamp, size FROM QueueSnapshots WHERE canteen_id = ? ORDER BY timestamp "
