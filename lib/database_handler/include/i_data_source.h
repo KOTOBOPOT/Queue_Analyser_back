@@ -27,6 +27,9 @@ class IDataSource {
       const time_point &end
   ) const = 0;
   virtual int selectLastEntry(int room_id) const = 0;
+  virtual nlohmann::json selectLastEntryJSON(
+      int room_id
+  ) const = 0;
   virtual std::vector<int> selectAllRooms() const = 0;
   virtual void insertEntry(int measurement, time_point time, int room_id) = 0;
 };
