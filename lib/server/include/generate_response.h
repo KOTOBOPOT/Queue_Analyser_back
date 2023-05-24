@@ -9,6 +9,10 @@ struct StringResponse : public std::string {
   static constexpr const char* contentType = "text/plain";
 };
 
+struct JsonResponse : public std::string {
+  static constexpr const char* contentType = "application/json";
+};
+
 template <typename T>
 Response generateResponse(
     const Request& req, const T& content,
