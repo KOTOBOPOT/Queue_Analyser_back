@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
       vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
 
       vid_processor->setVisualizeVidSourceIndex(
-          2);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
+          1);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
                // pushBackVideoSource().  В данном случае выводится видео с веб
                // камеры ноутбука
 
