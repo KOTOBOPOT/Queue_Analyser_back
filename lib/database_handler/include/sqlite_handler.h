@@ -8,6 +8,7 @@
 #define QUEUE_ANALYSER_LIB_DATABASE_HANDLER_INCLUDE_SQLITE_HANDLER_H_
 
 #include <sqlite3.h>
+#include <nlohmann/json.hpp>
 
 #include <chrono>
 #include <string>
@@ -26,6 +27,11 @@ class SQLiteHandler final : public IDataSource {
       const time_point& start, const time_point& end) const override;
   std::string selectEntriesOverIntervalString(
       const time_point& start, const time_point& end) const override;
+  nlohmann::json selectEntriesOverIntervalJSON(
+      const time_point &start, const time_point &end) const override;
+  nlohmann::json selectLastEntryJSON(
+      int room_id
+  ) const override;
   int selectLastEntry(int room_id) const override;
   std::vector<int> selectAllRooms() const override;
   void insertEntry(int measurement, time_point time, int room_id) override;

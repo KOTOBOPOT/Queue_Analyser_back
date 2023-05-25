@@ -13,6 +13,7 @@ add_library(computer_vision
                 src/file_video.cpp
                 src/i_video_source.cpp
                 src/video_processor.cpp
+                src/frame_visualizer.cpp
 )
 
 # Покдлючение всех hpp файлов в директории include/

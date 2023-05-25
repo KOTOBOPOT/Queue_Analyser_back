@@ -58,3 +58,12 @@ TEST(ParsingParams, ParsingEmpptyInParamsTest) {
 
   EXPECT_EQ(params["b"], "");
 }
+
+TEST(ParsingParams, ParsingMultipleParamsTest) {
+  std::string target =
+      "http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000";
+  auto params = parseQueryString(target);
+
+  EXPECT_EQ(params["start"], "20230501000000000");
+  EXPECT_EQ(params["end"], "20230501235900000");
+}

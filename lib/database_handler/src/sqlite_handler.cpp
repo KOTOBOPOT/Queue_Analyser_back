@@ -69,8 +69,7 @@ std::string SQLiteHandler::toISO8061(const time_point &time) {
  * @throws QueryPreparationException Вызывается, если не удается обработать SQL
  * запрос
  */
-std::vector<int> SQLiteHandler::selectEntriesOverInterval(
-    const time_point &start, const time_point &end) const {
+std::vector<int> SQLiteHandler::selectEntriesOverInterval(const time_point &start, const time_point &end) const {
   std::vector<int> results{};
   sqlite3_stmt *stmt;
   std::string query =
@@ -92,6 +91,67 @@ std::vector<int> SQLiteHandler::selectEntriesOverInterval(
   sqlite3_finalize(stmt);
 
   return results;
+}
+
+nlohmann::json SQLiteHandler::selectEntriesOverIntervalJSON(const time_point &start, const time_point &end) const {
+  nlohmann::json results{};
+
+  sqlite3_stmt *stmt;
+  std::string query =
+      "SELECT timestamp, size, canteen_id FROM QueueSnapshots WHERE timestamp BETWEEN ? AND ? ORDER "
+      "BY timestamp ASC;";
+
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    throw QueryPreparationException("Failed to prepare the statement: " +
+        std::string(sqlite3_errmsg(db_)));
+  }
+
+  sqlite3_bind_text(stmt, 1, toISO8061(start).c_str(), -1, SQLITE_TRANSIENT);
+  sqlite3_bind_text(stmt, 2, toISO8061(end).c_str(), -1, SQLITE_TRANSIENT);
+
+  while (sqlite3_step(stmt) == SQLITE_ROW) {
+    auto time= std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+    int size = sqlite3_column_int(stmt, 1);
+    auto room_id = std::to_string(sqlite3_column_int(stmt, 2));
+
+    if (!results.contains(room_id)) {
+      results[room_id] = nlohmann::json::array();
+    }
+    nlohmann::json row = {{"time", time}, {"amount", size}};
+    results[room_id].push_back(row);
+  }
+  sqlite3_finalize(stmt);
+
+  return results;
+  return nlohmann::json{};
+}
+
+nlohmann::json SQLiteHandler::selectLastEntryJSON(int room_id) const {
+  nlohmann::json result{};
+
+  sqlite3_stmt *stmt;
+  std::string query =
+      "SELECT timestamp, size FROM QueueSnapshots WHERE canteen_id = ? ORDER BY timestamp "
+      "DESC LIMIT 1;";
+
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    throw QueryPreparationException("Failed to prepare the statement: " +
+        std::string(sqlite3_errmsg(db_)));
+  }
+
+  sqlite3_bind_int(stmt, 1, room_id);
+
+  if (sqlite3_step(stmt) == SQLITE_ROW) {
+    nlohmann::json entry{};
+    entry["time"] = std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0)));
+    entry["amount"] = sqlite3_column_int(stmt, 1);
+    result[std::to_string(room_id)] = entry;
+  }
+
+  sqlite3_finalize(stmt);
+  return result;
 }
 
 /**
