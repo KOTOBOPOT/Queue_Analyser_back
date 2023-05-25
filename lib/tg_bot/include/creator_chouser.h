@@ -18,7 +18,7 @@ class CreatorChouser {
   void operator+=(std::pair<std::string, IHandlerCreator::Ptr>&& value);
 
  private:
-  std::map<std::string, IHandlerCreator::Ptr> _creators;
+  std::map<std::string, IHandlerCreator::Ptr> creators_;
 };
 }  // namespace QueueBot
 

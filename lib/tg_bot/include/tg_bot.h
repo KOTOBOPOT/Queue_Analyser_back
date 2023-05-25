@@ -32,10 +32,10 @@ class SimpleBot : public ITgBot {
   void run() override;
 
  private:
-  TgBot::Bot _bot;
-  TgBot::ReplyKeyboardMarkup::Ptr _keyboard;
-  std::vector<IBotHandler::Ptr> _handlers;
-  std::vector<TgBot::BotCommand::Ptr> _commands;
+  TgBot::Bot bot_;
+  TgBot::ReplyKeyboardMarkup::Ptr keyboard_;
+  std::vector<IBotHandler::Ptr> handlers_;
+  std::vector<TgBot::BotCommand::Ptr> commands_;
 };
 }  // namespace QueueBot
 

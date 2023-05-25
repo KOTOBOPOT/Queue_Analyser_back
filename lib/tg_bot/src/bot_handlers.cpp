@@ -6,40 +6,40 @@ namespace QueueBot {
 
 SimpleHandler::SimpleHandler(std::string token, std::string msg,
                              std::string help)
-    : _value(token), _message(msg), _help(help) {}
+    : value_(token), message_(msg), help_(help) {}
 
-std::string SimpleHandler::getHandlerString() { return _value; }
+std::string SimpleHandler::getHandlerString() { return value_; }
 
 bool SimpleHandler::isHandler(const TgBot::Message::Ptr msg) {
-  return msg->text == _value;
+  return msg->text == value_;
 }
 void SimpleHandler::sendMessage(const TgBot::Bot& bot,
                                 TgBot::Message::Ptr msg) {
-  bot.getApi().sendMessage(msg->chat->id, _message, false, 0, nullptr);
+  bot.getApi().sendMessage(msg->chat->id, message_, false, 0, nullptr);
 }
 
-std::string SimpleHandler::getHelp() { return _help; }
+std::string SimpleHandler::getHelp() { return help_; }
 
 CurrentDataHandler::CurrentDataHandler(
       std::string token, std::string msg,
       std::string help, std::shared_ptr<IDataSource> database)
-    : _value(token), _message(msg), _help(help), _database(database) {}
+    : value_(token), message_(msg), help_(help), database_(database) {}
 
-std::string CurrentDataHandler::getHandlerString() { return _value; }
+std::string CurrentDataHandler::getHandlerString() { return value_; }
 
 bool CurrentDataHandler::isHandler(const TgBot::Message::Ptr msg) {
-  return msg->text == _value;
+  return msg->text == value_;
 }
 void CurrentDataHandler::sendMessage(const TgBot::Bot& bot,
                                      TgBot::Message::Ptr msg) {
-  std::string message = _message;
-  int count = _database->selectLastEntry(0);
+  std::string message = message_;
+  int count = database_->selectLastEntry(0);
 
   boost::replace_all(message, "%1", std::to_string(count));
 
   bot.getApi().sendMessage(msg->chat->id, message, false, 0, nullptr);
 }
 
-std::string CurrentDataHandler::getHelp() { return _help; }
+std::string CurrentDataHandler::getHelp() { return help_; }
 
 }  // namespace QueueBot

@@ -32,9 +32,9 @@ class SimpleHandler : public IBotHandler {
   std::string getHelp() override;
 
  private:
-  std::string _value;
-  std::string _message;
-  std::string _help;
+  std::string value_;
+  std::string message_;
+  std::string help_;
 };
 
 class CurrentDataHandler : public IBotHandler {
@@ -48,10 +48,10 @@ class CurrentDataHandler : public IBotHandler {
   std::string getHelp() override;
 
  private:
-  std::string _value;
-  std::string _message;
-  std::string _help;
-  std::shared_ptr<IDataSource> _database;
+  std::string value_;
+  std::string message_;
+  std::string help_;
+  std::shared_ptr<IDataSource> database_;
 };
 
 }  // namespace QueueBot

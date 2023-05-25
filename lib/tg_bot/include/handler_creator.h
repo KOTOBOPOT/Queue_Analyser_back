@@ -27,7 +27,7 @@ class CurrentDataCreator : public IHandlerCreator {
   CurrentDataCreator(std::shared_ptr<IDataSource> database);
   IBotHandler::Ptr create(nlohmann::json handlerData) override;
  private:
-  std::shared_ptr<IDataSource> _database;
+  std::shared_ptr<IDataSource> database_;
 };
 }  // namespace QueueBot
 
