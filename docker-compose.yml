@@ -1,0 +1,20 @@
+version: '3'
+services:
+  queue_analyser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - x11vnc
+    environment:
+      - DISPLAY=:0
+
+  x11vnc:
+    image: dorowu/ubuntu-desktop-lxde-vnc
+    ports:
+      - 5900:5900
+    environment:
+      - VNC_RESOLUTION=1024x768
+      - VNC_PW=123
