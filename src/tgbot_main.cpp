@@ -5,8 +5,12 @@
 #include "bot.h"
 
 int main(int argc, char** argv) {
+  std::ifstream token_file("../configs/tg_bot_token.json");
+  nlohmann::json token;
+  token_file >> token;
+
   auto bot =
-      QueueBot::SimpleBot("6216802370:AAHtsAHiNSVm4PZv2r1YZHdQu5ap63LF8kE");
+      QueueBot::SimpleBot(token.at("token"));
 
   std::ifstream file("../configs/tg_bot_menu.json");
   nlohmann::json menu;
