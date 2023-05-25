@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "i_tg_bot.h"
 #include "bot_handlers.h"
 
 namespace QueueBot {
