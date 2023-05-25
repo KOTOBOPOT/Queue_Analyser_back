@@ -1,7 +1,9 @@
 add_library(tg_bot  
                 src/tg_bot.cpp
-                src/bot_handlers.cpp
-                src/handler_creator.cpp
+                src/bot_handlers/current_data_handler.cpp
+                src/bot_handlers/simple_handler.cpp
+                src/handler_creators/current_data_creator.cpp
+                src/handler_creators/simple_creator.cpp
                 src/creator_chouser.cpp
 )
 

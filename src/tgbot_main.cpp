@@ -23,8 +23,6 @@ int main(int argc, char** argv) {
   chouser += 
       {"current_data_tag", std::make_unique<QueueBot::CurrentDataCreator>(db)};
 
-  std::cout << menu.dump() << std::endl;
-
   for (auto& val : menu.at("buttons")) {
     std::cout << val.dump() << std::endl;
     bot.addKeyboardButton(chouser.create(val.at("handler")),
