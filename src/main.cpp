@@ -23,13 +23,10 @@ int main(int argc, char* argv[]) {
   std::thread video_thread([&rt]() {
     SQLiteHandler db_handler("/app/db/db.db");
     while (true) {
-      // auto vid_processor =
-      //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
-
       auto vid_processor = getVideoProcessor();
 
-      std::shared_ptr<FileVideo> fv1 =
-          std::make_shared<FileVideo>("/app/static/video_examples/ex1.mp4", 0.5);
+      std::shared_ptr<FileVideo> fv1 = std::make_shared<FileVideo>(
+          "/app/static/video_examples/ex1.mp4", 0.5);
       std::shared_ptr<FileVideo> fv2 = std::make_shared<FileVideo>(
           "/app/static/video_examples/sample.mp4", 0.1);
       std::shared_ptr<CamVideo> fv3 = std::make_shared<CamVideo>(0);
@@ -40,11 +37,8 @@ int main(int argc, char* argv[]) {
           fv2, cv::Rect(10, 50, 500,
                         500));  // можно также указывать прямоугольник очереди
       vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
+      // vid_processor->setVisualizeVidSourceIndex(1);
 
-      vid_processor->setVisualizeVidSourceIndex(
-          1);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
-               // pushBackVideoSource().  В данном случае выводится видео с веб
-               // камеры ноутбука
 
       std::cout << "Reopen video..." << std::endl;
       std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();

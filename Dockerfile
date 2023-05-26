@@ -18,9 +18,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libswscale-dev \
     python3-opencv \
     libopencv-dev \
-    nlohmann-json3-dev \
-    xvfb \
-    x11vnc
+    nlohmann-json3-dev
 
 # Копируем файлы проекта внутрь образа
 COPY . /app
@@ -32,4 +30,4 @@ WORKDIR /app
 RUN mkdir build && cd build && cmake .. && make
 
 # Запускаем приложение при запуске контейнера
-CMD Xvfb :0 -screen 0 1024x768x24 & xvfb-run --server-args="-screen 0 1024x768x24 -ac -nolisten tcp -dpi 96 +extension GLX +render" & sleep 5 && x11vnc -display :0 -forever -usepw -create
+CMD ["./build/queueAnalyser"]
