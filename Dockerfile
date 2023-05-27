@@ -29,4 +29,4 @@ WORKDIR /app
 RUN mkdir build && cd build && cmake .. && make
 
 # Запускаем приложение при запуске контейнера
-CMD ["./build/queueAnalyser"]
+CMD echo "./build/tgBot &\n./build/queueAnalyser" | bash

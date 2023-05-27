@@ -12,7 +12,7 @@ class CurrentDataHandler : public IBotHandler {
 
   std::string getHandlerString() override;
   bool isHandler(const TgBot::Message::Ptr msg) override;
-  void sendMessage(const TgBot::Bot& bot, TgBot::Message::Ptr msg) override;
+  void sendMessage(TgBot::Bot& bot, TgBot::Message::Ptr msg) override;
   std::string getHelp() override;
 
  private:
@@ -20,6 +20,11 @@ class CurrentDataHandler : public IBotHandler {
   std::string message_;
   std::string help_;
   std::shared_ptr<IDataSource> database_;
+  int room_id_;
+
+  TgBot::InlineKeyboardMarkup::Ptr createKeyboard_();
+  std::string getMessage_();
+  void editMessage_(TgBot::Bot& bot, TgBot::Message::Ptr msg);
 };
 
 }  // namespace QueueBot

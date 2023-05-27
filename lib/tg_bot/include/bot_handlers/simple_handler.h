@@ -10,7 +10,7 @@ class SimpleHandler : public IBotHandler {
 
   std::string getHandlerString() override;
   bool isHandler(const TgBot::Message::Ptr msg) override;
-  void sendMessage(const TgBot::Bot& bot, TgBot::Message::Ptr msg) override;
+  void sendMessage(TgBot::Bot& bot, TgBot::Message::Ptr msg) override;
   std::string getHelp() override;
 
  private:

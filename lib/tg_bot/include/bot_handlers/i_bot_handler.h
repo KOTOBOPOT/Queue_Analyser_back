@@ -13,7 +13,7 @@ class IBotHandler {
 
   virtual std::string getHandlerString() = 0;
   virtual bool isHandler(const TgBot::Message::Ptr msg) = 0;
-  virtual void sendMessage(const TgBot::Bot& bot, TgBot::Message::Ptr msg) = 0;
+  virtual void sendMessage(TgBot::Bot& bot, TgBot::Message::Ptr msg) = 0;
   virtual std::string getHelp() = 0;
 };
 
