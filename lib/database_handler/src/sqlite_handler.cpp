@@ -31,6 +31,11 @@ SQLiteHandler::SQLiteHandler(const std::string &db_path) : db_(nullptr) {
     throw DBAccessException("Cannot connect to database: " +
         std::string(sqlite3_errmsg(db_)));
   }
+
+  int sqlite3_ret = 0;
+  std::string sql_pragma = "PRAGMA busy_timeout=30000";
+  char* error_msg;
+  sqlite3_ret = sqlite3_exec(db_, sql_pragma.c_str(), nullptr, nullptr, &error_msg);
 }
 
 SQLiteHandler::~SQLiteHandler() { sqlite3_close(db_); }
