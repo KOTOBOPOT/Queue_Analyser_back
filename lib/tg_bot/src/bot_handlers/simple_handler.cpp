@@ -11,8 +11,7 @@ std::string SimpleHandler::getHandlerString() { return value_; }
 bool SimpleHandler::isHandler(const TgBot::Message::Ptr msg) {
   return msg->text == value_;
 }
-void SimpleHandler::sendMessage(TgBot::Bot& bot,
-                                TgBot::Message::Ptr msg) {
+void SimpleHandler::sendMessage(TgBot::Bot& bot, TgBot::Message::Ptr msg) {
   bot.getApi().sendMessage(msg->chat->id, message_, false, 0, nullptr);
 }
 

@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 
-#include "i_tg_bot.h"
 #include "bot_handlers.h"
+#include "i_tg_bot.h"
 
 namespace QueueBot {
 class SimpleBot : public ITgBot {

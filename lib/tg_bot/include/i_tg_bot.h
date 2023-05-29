@@ -17,6 +17,6 @@ class ITgBot {
   virtual void run() = 0;
 };
 
-} // namespace QueueBot
+}  // namespace QueueBot
 
-#endif // QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_I_TG_BOT_H_
+#endif  // QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_I_TG_BOT_H_

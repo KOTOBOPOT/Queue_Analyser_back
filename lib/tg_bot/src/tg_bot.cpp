@@ -11,8 +11,8 @@ SimpleBot::SimpleBot(std::string token)
   keyboard_->oneTimeKeyboard = false;
 
   bot_.getEvents().onCommand("start", [&](TgBot::Message::Ptr message) {
-    this->bot_.getApi().sendMessage(message->chat->id, "Пожалуйста выберите столовую", 
-                                    false, 0, keyboard_);
+    this->bot_.getApi().sendMessage(
+        message->chat->id, "Пожалуйста выберите столовую", false, 0, keyboard_);
   });
   TgBot::BotCommand::Ptr command = std::make_unique<TgBot::BotCommand>();
   command->command = "start";

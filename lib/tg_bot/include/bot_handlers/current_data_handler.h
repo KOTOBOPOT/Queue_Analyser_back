@@ -9,8 +9,8 @@
 namespace QueueBot {
 class CurrentDataHandler : public IBotHandler {
  public:
-  CurrentDataHandler(std::string token, std::string msg, std::string help, 
-                     std::shared_ptr<IDataSource> database, 
+  CurrentDataHandler(std::string token, std::string msg, std::string help,
+                     std::shared_ptr<IDataSource> database,
                      nlohmann::json& names);
 
   std::string getHandlerString() override;

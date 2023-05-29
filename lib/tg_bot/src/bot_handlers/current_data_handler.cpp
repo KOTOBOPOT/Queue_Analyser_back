@@ -1,23 +1,29 @@
-#include <boost/algorithm/string/replace.hpp>
-
 #include "bot_handlers/current_data_handler.h"
+
+#include <boost/algorithm/string/replace.hpp>
 #include <iostream>
 
 namespace QueueBot {
-CurrentDataHandler::CurrentDataHandler(
-      std::string token, std::string msg, std::string help, 
-      std::shared_ptr<IDataSource> database, nlohmann::json& names)
-    : value_(token), message_(msg), help_(help), database_(database), 
-      room_id_(0), names_(names) {}
+CurrentDataHandler::CurrentDataHandler(std::string token, std::string msg,
+                                       std::string help,
+                                       std::shared_ptr<IDataSource> database,
+                                       nlohmann::json& names)
+    : value_(token),
+      message_(msg),
+      help_(help),
+      database_(database),
+      room_id_(0),
+      names_(names) {}
 
 std::string CurrentDataHandler::getHandlerString() { return value_; }
 
 TgBot::InlineKeyboardMarkup::Ptr CurrentDataHandler::createKeyboard_() {
-  TgBot::InlineKeyboardMarkup::Ptr inline_keyboard(std::make_unique<TgBot::InlineKeyboardMarkup>());
+  TgBot::InlineKeyboardMarkup::Ptr inline_keyboard(
+      std::make_unique<TgBot::InlineKeyboardMarkup>());
   std::vector<TgBot::InlineKeyboardButton::Ptr> row;
-  for (auto& i : names_.at("names"))
-  {
-    TgBot::InlineKeyboardButton::Ptr btn(std::make_unique<TgBot::InlineKeyboardButton>());
+  for (auto& i : names_.at("names")) {
+    TgBot::InlineKeyboardButton::Ptr btn(
+        std::make_unique<TgBot::InlineKeyboardButton>());
     if (i.at("id").get<size_t>() == room_id_)
       btn->text = "👉 " + i.at("title").get<std::string>() + " 👈";
     else
@@ -38,30 +44,29 @@ std::string CurrentDataHandler::getMessage_() {
       boost::replace_all(message, "%1", "Нет данных");
     else
       boost::replace_all(message, "%1", std::to_string(count));
-  }
-  catch (...) {
+  } catch (...) {
     boost::replace_all(message, "%1", "Нет данных");
   }
-  
-  boost::replace_all(message, "%2", names_.at("names")[room_id_].at("title").get<std::string>());
+
+  boost::replace_all(
+      message, "%2",
+      names_.at("names")[room_id_].at("title").get<std::string>());
   return message;
 }
 
-void CurrentDataHandler::editMessage_(TgBot::Bot& bot, TgBot::Message::Ptr msg)
-{
+void CurrentDataHandler::editMessage_(TgBot::Bot& bot,
+                                      TgBot::Message::Ptr msg) {
   try {
-      bot.getApi().editMessageText(getMessage_(), 
-        msg->chat->id, msg->messageId, "", 
-        "", false, createKeyboard_());
+    bot.getApi().editMessageText(getMessage_(), msg->chat->id, msg->messageId,
+                                 "", "", false, createKeyboard_());
+  } catch (...) {
   }
-  catch (...) {}
 }
 
 bool CurrentDataHandler::isHandler(const TgBot::Message::Ptr msg) {
   return msg->text == value_;
 }
-void CurrentDataHandler::sendMessage(TgBot::Bot& bot,
-                                     TgBot::Message::Ptr msg) {
+void CurrentDataHandler::sendMessage(TgBot::Bot& bot, TgBot::Message::Ptr msg) {
   bot.getEvents().onCallbackQuery([&](TgBot::CallbackQuery::Ptr query) {
     std::string button_text = query->data;
 
@@ -71,7 +76,8 @@ void CurrentDataHandler::sendMessage(TgBot::Bot& bot,
       editMessage_(bot, query->message);
     }
   });
-  bot.getApi().sendMessage(msg->chat->id, getMessage_(), false, 0, createKeyboard_());
+  bot.getApi().sendMessage(msg->chat->id, getMessage_(), false, 0,
+                           createKeyboard_());
 }
 
 std::string CurrentDataHandler::getHelp() { return help_; }

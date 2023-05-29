@@ -9,9 +9,8 @@
 namespace QueueBot {
 class AllDataHandler : public IBotHandler {
  public:
-  AllDataHandler(std::string token, std::string msg, std::string help, 
-                     std::shared_ptr<IDataSource> database, 
-                     nlohmann::json& names);
+  AllDataHandler(std::string token, std::string msg, std::string help,
+                 std::shared_ptr<IDataSource> database, nlohmann::json& names);
 
   std::string getHandlerString() override;
   bool isHandler(const TgBot::Message::Ptr msg) override;
