@@ -8,3 +8,9 @@ cmake .
 make -j4
 sudo make install
 ```
+
+### Запуск бота
+Для запуска бота в `configs` требуктся добавить файл `tg_bot_token.json` вида
+```
+{ "token": "<Токен телеграм бота>" }
+```

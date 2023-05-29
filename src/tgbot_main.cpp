@@ -6,13 +6,28 @@
 
 int main(int argc, char** argv) {
   std::ifstream token_file("/app/configs/tg_bot_token.json");
+  if (!token_file.is_open())
+  {
+    std::cout <<  "Не найден файл токена для телеграмм бота "
+                  "или возникла ошибка при его открытии" << std::endl;
+    return 1;
+  }
+
   nlohmann::json token;
   token_file >> token;
+
 
   auto bot =
       QueueBot::SimpleBot(token.at("token"));
 
   std::ifstream file("/app/configs/tg_bot_menu.json");
+  if (!token_file.is_open())
+  {
+    std::cout <<  "Не найден файл меню для телеграмм бота "
+                  "или возникла ошибка при его открытии" << std::endl;
+    return 1;
+  }
+
   nlohmann::json menu;
 
   file >> menu;
