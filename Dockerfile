@@ -1,5 +1,6 @@
 # Base image
 FROM ubuntu:latest
+FROM reo7sp/tgbot-cpp
 
 # Устанавливаем зависимости
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -28,4 +29,4 @@ WORKDIR /app
 RUN mkdir build && cd build && cmake .. && make
 
 # Запускаем приложение при запуске контейнера
-CMD ["./build/queueAnalyser"]
+CMD echo "./build/tgBot &\n./build/queueAnalyser" | bash
