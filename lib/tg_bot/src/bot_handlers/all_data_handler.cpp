@@ -31,10 +31,13 @@ std::string AllDataHandler::getMessage_() {
     auto row = database_->selectLastEntryJSON(i.at("id").get<size_t>());
     try {
       int count = row.at(std::to_string(i.at("id").get<size_t>())).at("amount");
-      boost::replace_all(temp, "%1", std::to_string(count));
+      if (count < 0)
+        boost::replace_all(temp, "%1", "Нет данных");
+      else
+        boost::replace_all(temp, "%1", std::to_string(count));
     }
     catch (...) {
-      boost::replace_all(temp, "%1", "Недоступно");
+      boost::replace_all(temp, "%1", "Нет данных");
     }
     message += temp;
   }

@@ -32,8 +32,17 @@ TgBot::InlineKeyboardMarkup::Ptr CurrentDataHandler::createKeyboard_() {
 std::string CurrentDataHandler::getMessage_() {
   std::string message = message_;
   auto row = database_->selectLastEntryJSON(room_id_);
-  int count = row.at(std::to_string(room_id_)).at("amount");
-  boost::replace_all(message, "%1", std::to_string(count));
+  try {
+    int count = row.at(std::to_string(room_id_)).at("amount");
+    if (count < 0)
+      boost::replace_all(message, "%1", "Нет данных");
+    else
+      boost::replace_all(message, "%1", std::to_string(count));
+  }
+  catch (...) {
+    boost::replace_all(message, "%1", "Нет данных");
+  }
+  
   boost::replace_all(message, "%2", names_.at("names")[room_id_].at("title").get<std::string>());
   return message;
 }
