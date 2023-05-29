@@ -7,10 +7,11 @@
 namespace QueueBot {
 class CurrentDataCreator : public IHandlerCreator {
  public:
-  CurrentDataCreator(std::shared_ptr<IDataSource> database);
+  CurrentDataCreator(std::shared_ptr<IDataSource> database, nlohmann::json names);
   IBotHandler::Ptr create(nlohmann::json handlerData) override;
  private:
   std::shared_ptr<IDataSource> database_;
+  nlohmann::json names_;
   
 };
 

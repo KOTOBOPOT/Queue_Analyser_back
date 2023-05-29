@@ -1,6 +1,8 @@
 #ifndef QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_BOT_HANDLERS_CURRENT_DATA_HANDLER_H_
 #define QUEUE_ANALYSER_LIB_TG_BOT_INCLUDE_BOT_HANDLERS_CURRENT_DATA_HANDLER_H_
 
+#include <nlohmann/json.hpp>
+
 #include "bot_handlers/i_bot_handler.h"
 #include "sqlite_handler.h"
 
@@ -8,7 +10,8 @@ namespace QueueBot {
 class CurrentDataHandler : public IBotHandler {
  public:
   CurrentDataHandler(std::string token, std::string msg, std::string help, 
-                     std::shared_ptr<IDataSource> database);
+                     std::shared_ptr<IDataSource> database, 
+                     nlohmann::json& names);
 
   std::string getHandlerString() override;
   bool isHandler(const TgBot::Message::Ptr msg) override;
@@ -21,6 +24,7 @@ class CurrentDataHandler : public IBotHandler {
   std::string help_;
   std::shared_ptr<IDataSource> database_;
   int room_id_;
+  nlohmann::json names_;
 
   TgBot::InlineKeyboardMarkup::Ptr createKeyboard_();
   std::string getMessage_();
