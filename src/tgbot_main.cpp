@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
   std::shared_ptr<QueueBot::SimpleBot> bot;
 
   {
-    std::ifstream token_file("/app/configs/tg_bot_token.json");
+    std::ifstream token_file("./configs/tg_bot_token.json");
     if (!token_file.is_open()) {
       std::cerr <<  "Не найден файл токена для телеграмм бота "
                     "или возникла ошибка при его открытии" << std::endl;
@@ -30,14 +30,14 @@ int main(int argc, char** argv) {
       return 1;
     }
 
-    std::ifstream file("/app/configs/tg_bot_menu.json");
+    std::ifstream file("./configs/tg_bot_menu.json");
     if (!token_file.is_open()) {
       std::cerr <<  "Не найден файл меню для телеграмм бота "
                     "или возникла ошибка при его открытии" << std::endl;
       return 1;
     }
 
-    std::ifstream names_file("/app/configs/names.json");
+    std::ifstream names_file("./configs/names.json");
     if (!names_file.is_open()) {
       std::cerr <<  "Не найден файл имён столовых "
                     "или возникла ошибка при его открытии" << std::endl;
@@ -53,10 +53,11 @@ int main(int argc, char** argv) {
     }
 
 
-    std::shared_ptr<IDataSource> db = std::make_unique<SQLiteHandler>("/app/db/db.db");
+    std::shared_ptr<IDataSource> db = std::make_unique<SQLiteHandler>("./db/db.db");
 
     QueueBot::CreatorChouser chouser;
     chouser += {"simple_tag", std::make_unique<QueueBot::SimpleCreator>()};
+    chouser += {"all_data_tag", std::make_unique<QueueBot::AllDataCreator>(db, names)};
     chouser += 
         {"current_data_tag", std::make_unique<QueueBot::CurrentDataCreator>(db, names)};
 
