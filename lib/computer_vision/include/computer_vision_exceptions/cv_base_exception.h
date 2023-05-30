@@ -1,6 +1,6 @@
 /**
  * @brief В этом файле написан класс базовой ошибки работы с CV
- * @author Виктор Борисов (KOTOBOPOT)DaMagus26
+ * @author Виктор Борисов (KOTOBOPOT)
  */
 
 #ifndef QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_COMPUTER_VISION_EXCEPTIONS_CV_BASE_EXCEPTION_H_
