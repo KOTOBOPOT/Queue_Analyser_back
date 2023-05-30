@@ -32,4 +32,4 @@ WORKDIR /app
 RUN mkdir build && cd build && cmake .. && make
 
 # Запускаем приложение при запуске контейнера
-CMD Xvfb :0 -screen 0 1024x768x24 & xvfb-run --server-args="-screen 0 1024x768x24 -ac -nolisten tcp -dpi 96 +extension GLX +render" & sleep 5 && x11vnc -display :0 -forever -usepw -create
+CMD Xvfb :0 -screen 0 1024x768x24 & xvfb-run --server-args="-screen 0 1024x768x24 -ac -nolisten tcp -dpi 96 +extension GLX +render" & sleep 5 && x11vnc -display :0 -forever -create -nopw
