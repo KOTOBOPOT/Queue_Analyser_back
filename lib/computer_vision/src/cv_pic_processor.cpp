@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "../include/computer_vision_exceptions/file_open_exc.h"
+
 CVPicProcessor::CVPicProcessor() {
   class_list_ = loadClassList();
   loadNet(net_, is_cuda_);
@@ -105,6 +107,10 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 std::vector<std::string> CVPicProcessor::loadClassList() {
   std::vector<std::string> class_list;
   std::ifstream ifs("/app/static/model/classes.txt");
+  if (!ifs) {
+    throw FileOpenException(
+        "Failed to load classes file for detection");
+  }
   std::string line;
   while (getline(ifs, line)) {
     class_list.push_back(line);
