@@ -23,11 +23,11 @@ int main(int argc, char* argv[]) {
     while (true) {
       auto vid_processor = getVideoProcessor();
 
-      auto fv1 = std::make_shared<FileVideo>(
-          "/app/static/video_examples/ex1.mp4", 0.5);
-      auto fv2 = std::make_shared<FileVideo>(
-          "/app/static/video_examples/sample.mp4", 0.1);
-      auto fv3 = std::make_shared<CamVideo>(0);
+      std::shared_ptr<FileVideo> fv1 =
+          std::make_shared<FileVideo>("/app/static/video_examples/ex1.mp4", 2);
+      std::shared_ptr<FileVideo> fv2 = std::make_shared<FileVideo>(
+          "/app/static/video_examples/sample.mp4", 2);
+      std::shared_ptr<CamVideo> fv3 = std::make_shared<CamVideo>(0);
 
       vid_processor->pushBackVideoSource(
           fv1);  // Добавляем в видео_процессор источники для видео
@@ -35,22 +35,17 @@ int main(int argc, char* argv[]) {
           fv2, cv::Rect(10, 50, 500,
                         500));  // можно также указывать прямоугольник очереди
       vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
-
-      //Убрал визулизацию
-      //vid_processor->setVisualizeVidSourceIndex(
-      //   1);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
-               // pushBackVideoSource().  В данном случае выводится видео с веб
-               // камеры ноутбука
+      // vid_processor->setVisualizeVidSourceIndex(1);
 
       std::cout << "Reopen video..." << std::endl;
       std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
       while (((people_amounts[0]) != -1) && (people_amounts[1] != -1)) {
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        std::cout << "Current people amount from first videosource: "
-                  << people_amounts[0]
-                  << ". From second videosource: " << people_amounts[1]
-                  // << ". From third: " << people_amounts[2]
-                  << std::endl;  // Если видео кончилось, возращает -1
+        std::cout << "Current people amounts: ";
+        for (int i = 0; i < people_amounts.size(); ++i) {
+          std::cout << i << ": " << people_amounts[i] << ", ";
+        };
+        std::cout << std::endl;
 
         auto time_now = std::chrono::system_clock::now();
 
