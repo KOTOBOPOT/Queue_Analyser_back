@@ -9,6 +9,14 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
 add_subdirectory(lib/server)
 add_subdirectory(lib/computer_vision)
 add_subdirectory(lib/database_handler)
@@ -26,10 +34,16 @@ add_executable(${PROJECT_NAME}
                     src/video_processors.cpp
 )
 
+
+add_executable(tgBot
+                    src/tgbot_main.cpp
+)
+target_link_libraries(tgBot tg_bot database_handler)
+
+
 target_link_libraries(${PROJECT_NAME} 
                         server 
                         computer_vision 
                         database_handler 
-                        tg_bot 
                         ${Boost_LIBRARIES}
 )

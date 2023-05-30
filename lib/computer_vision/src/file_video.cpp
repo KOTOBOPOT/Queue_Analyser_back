@@ -2,6 +2,8 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "../include/computer_vision_exceptions/cv_open_video_source_exc.h"
+
 FileVideo::FileVideo(const std::string& filename, float skip_secs) {
   filename_ = filename;
 
@@ -9,7 +11,9 @@ FileVideo::FileVideo(const std::string& filename, float skip_secs) {
 
   capture_.open(filename);
   if (!isCaptureOpened()) {
-    std::cerr << "Error opening video file\n";
+    throw CVOpenVidSourceException(
+        "Failed to open file video source with name: " +
+        filename);//std::cerr << "Error opening video file\n";
   }
   fps_ = capture_.get(cv::CAP_PROP_FPS);
   ;
