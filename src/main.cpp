@@ -28,11 +28,11 @@ int main(int argc, char* argv[]) {
 
       auto vid_processor = getVideoProcessor();
 
-      std::shared_ptr<FileVideo> fv1 =
-          std::make_shared<FileVideo>("/app/static/video_examples/ex1.mp4", 0.5);
-      std::shared_ptr<FileVideo> fv2 = std::make_shared<FileVideo>(
+      auto fv1 = std::make_shared<FileVideo>(
+          "/app/static/video_examples/ex1.mp4", 0.5);
+      auto fv2 = std::make_shared<FileVideo>(
           "/app/static/video_examples/sample.mp4", 0.1);
-      std::shared_ptr<CamVideo> fv3 = std::make_shared<CamVideo>(0);
+      auto fv3 = std::make_shared<CamVideo>(0);
 
       vid_processor->pushBackVideoSource(
           fv1);  // Добавляем в видео_процессор источники для видео
@@ -41,14 +41,15 @@ int main(int argc, char* argv[]) {
                         500));  // можно также указывать прямоугольник очереди
       vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
 
-      vid_processor->setVisualizeVidSourceIndex(
-          2);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
+      //Убрал визулизацию
+      //vid_processor->setVisualizeVidSourceIndex(
+      //   1);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
                // pushBackVideoSource().  В данном случае выводится видео с веб
                // камеры ноутбука
 
       std::cout << "Reopen video..." << std::endl;
       std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
-      while (((people_amounts[0]) != -1) || (people_amounts[1] != -1)) {
+      while (((people_amounts[0]) != -1) && (people_amounts[1] != -1)) {
         // std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::cout << "Current people amount from first videosource: "
                   << people_amounts[0]
