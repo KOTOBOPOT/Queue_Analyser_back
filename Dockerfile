@@ -2,8 +2,6 @@
 FROM ubuntu:latest
 FROM reo7sp/tgbot-cpp
 
-EXPOSE 8080
-
 # Устанавливаем зависимости
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
@@ -19,9 +17,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libswscale-dev \
     python3-opencv \
     libopencv-dev \
-    nlohmann-json3-dev \
-    xvfb \
-    x11vnc
+    nlohmann-json3-dev
 
 # Копируем файлы проекта внутрь образа
 COPY . /app
