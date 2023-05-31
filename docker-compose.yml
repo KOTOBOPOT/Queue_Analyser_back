@@ -1,6 +1,6 @@
 version: '3'
 services:
-  queue_analyser_no_visualize:
+  queue_analyser:
     build:
       context: .
       dockerfile: Dockerfile
