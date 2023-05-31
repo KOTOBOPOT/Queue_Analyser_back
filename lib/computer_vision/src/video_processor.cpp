@@ -99,47 +99,17 @@ VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
     }
 
     people_amount_vec.push_back(
-        people_in_queue_amount);  // Пока для одного объекта. Это задел на
-                                  // будущее
+        people_in_queue_amount);  
   }
   return people_amount_vec;
 }
 bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
                                    const cv::Rect& queue_box) {
-  size_t person_box_width = person_box.width;
-  size_t person_box_height = person_box.height;
-  size_t person_box_x = person_box.x;
-  size_t person_box_y = person_box.y;
 
-  cv::Point left_up_point = cv::Point(person_box_x, person_box_y);
-  cv::Point left_down_point =
-      cv::Point(person_box_x, person_box_y + person_box_height);
-  cv::Point right_up_point =
-      cv::Point(person_box_x + person_box_width, person_box_y);
-  cv::Point right_down_point = cv::Point(person_box_x + person_box_width,
-                                         person_box_y + person_box_height);
-  cv::Point center_point = cv::Point(person_box_x + person_box_width / 2,
-                                     person_box_y + person_box_height / 2);
-  cv::Point left_middle_point =
-      cv::Point(person_box_x, person_box_y + person_box_height / 2);
-  cv::Point right_middle_point = cv::Point(
-      person_box_x + person_box_width, person_box_y + person_box_height / 2);
-
-  bool contains_at_least_one_point = queue_box.contains(left_up_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(left_down_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(right_up_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(right_down_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(center_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(left_middle_point);
-  contains_at_least_one_point =
-      contains_at_least_one_point | queue_box.contains(right_middle_point);
-
-  return contains_at_least_one_point;
+  int intersectionArea = (person_box & queue_box).area();
+  //int unionArea = person_box.area() + queue_box.area() - intersectionArea;
+  //double iou = (double)intersectionArea / (double)unionArea;
+  return intersectionArea>0;
 }
 
 bool VideoProcessor::isEndOfVideo() { return frame_.empty(); }
