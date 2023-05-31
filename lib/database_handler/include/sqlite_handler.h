@@ -35,6 +35,7 @@ class SQLiteHandler final : public IDataSource {
   int selectLastEntry(int room_id) const override;
   std::vector<int> selectAllRooms() const override;
   void insertEntry(int measurement, time_point time, int room_id) override;
+  void deleteOlderEntries(int max_age_months = 6);
 
   // Deletions
   SQLiteHandler(const SQLiteHandler&) = delete;

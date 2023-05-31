@@ -132,6 +132,16 @@ nlohmann::json SQLiteHandler::selectEntriesOverIntervalJSON(const time_point &st
   return nlohmann::json{};
 }
 
+/**
+ * @brief Запросов всех замеров за указанный интервал. В отличие от selectEntriesOverInterval, этот метод возвращает
+ * значения в виде объекта nlohmann::json, где ключам (время замера) соответствуют данные замеров.
+ * @param start Объект std::chrono::system_clock::time_point, начало интервала
+ * @param end Объект std::chrono::system_clock::time_point, конец интервала
+ * @return nlohmann::json Объект nlohmann::json, где ключам (время замера) соответствуют данные замеров
+ * возрастанию, разделены символом перехода строки.
+ * @throws QueryPreparationException Вызывается, если не удается обработать SQL
+ * @throws QueryExecutionException Вызывается, если во время исполнения запроса произошла ошибка.
+ */
 nlohmann::json SQLiteHandler::selectLastEntryJSON(int room_id) const {
   nlohmann::json result{};
 
@@ -241,13 +251,17 @@ void SQLiteHandler::insertEntry(int measurement, time_point time, int room_id) {
 
   rc = sqlite3_step(stmt);
   if (rc != SQLITE_DONE) {
-    throw QueryExecutionException("Failed to prepare the statement: " +
+    throw QueryExecutionException("Failed to execute the statement: " +
         std::string(sqlite3_errmsg(db_)));
   }
 
   sqlite3_finalize(stmt);
 }
 
+/**
+ * @brief Объединяет строки в контейнере, разделяя их символом separator. Возвращает объединенную строку.
+ * @param begin, end Итераторы, указывающие на начало и конец рассматриваемого контейнера
+ */
 template<typename Iterator>
 std::string join(Iterator begin, Iterator end, char separator = '.') {
   std::ostringstream o;
@@ -258,8 +272,43 @@ std::string join(Iterator begin, Iterator end, char separator = '.') {
   return o.str();
 }
 
+/**
+ * @brief Запросов всех замеров за указанный интервал. В отличие от selectEntriesOverInterval, этот метод возвращает
+ * значения в виде строки, где данные из таблицы разделены символом перехода строки ('\n')
+ * @param start Объект std::chrono::system_clock::time_point, начало интервала
+ * @param end Объект std::chrono::system_clock::time_point, конец интервала
+ * @return std::string Строки, где данные замеров, отсортированные по времени снятия по
+ * возрастанию, разделены символом перехода строки.
+ * @throws QueryPreparationException Вызывается, если не удается обработать SQL
+ * @throws QueryExecutionException Вызывается, если во время исполнения запроса произошла ошибка.
+ */
 std::string SQLiteHandler::selectEntriesOverIntervalString(
     const time_point &start, const time_point &end) const {
   std::vector<int> result_vector = selectEntriesOverInterval(start, end);
   return join(result_vector.begin(), result_vector.end(), '\n');
+}
+
+
+void SQLiteHandler::deleteOlderEntries(int max_age_months) {
+  auto now = std::chrono::system_clock::now();
+  auto six_months_ago = now - std::chrono::months(max_age_months);
+
+  sqlite3_stmt *stmt;
+  std::string query = "DELETE FROM Queue_snapshots WHERE timestamp < ?;";
+
+  int rc = sqlite3_prepare_v2(db_, query.c_str(), -1, &stmt, nullptr);
+  if (rc != SQLITE_OK) {
+    throw QueryPreparationException("Failed to prepare the statement: " +
+        std::string(sqlite3_errmsg(db_)));
+  }
+
+  sqlite3_bind_text(stmt, 1, toISO8061(six_months_ago).c_str(), -1, SQLITE_TRANSIENT);
+
+  rc = sqlite3_step(stmt);
+  if (rc != SQLITE_DONE) {
+    throw QueryExecutionException("Failed to execute the statement: " +
+        std::string(sqlite3_errmsg(db_)));
+  }
+
+  sqlite3_finalize(stmt);
 }
