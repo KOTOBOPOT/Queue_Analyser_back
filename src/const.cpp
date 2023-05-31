@@ -1,3 +1,4 @@
 #include "const.h"
 
-const std::string DOC_ROOT = "..";
+// Для запуска через cmake меняем на ".."
+const std::string DOC_ROOT = "/app";
