@@ -11,7 +11,7 @@ CVPicProcessor::CVPicProcessor() {
 }
 
 void CVPicProcessor::loadNet(cv::dnn::Net &net, bool is_cuda) {
-  auto result = cv::dnn::readNet("/app/static/model/yolov5s.onnx");
+  auto result = cv::dnn::readNet(model_file_path_+"/yolov5s.onnx");
   if (is_cuda_) {
     // Attempt to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
@@ -106,7 +106,7 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 
 std::vector<std::string> CVPicProcessor::loadClassList() {
   std::vector<std::string> class_list;
-  std::ifstream ifs("/app/static/model/classes.txt");
+  std::ifstream ifs(model_file_path_+"/classes.txt");
   if (!ifs) {
     throw FileOpenException(
         "Failed to load classes file for detection");

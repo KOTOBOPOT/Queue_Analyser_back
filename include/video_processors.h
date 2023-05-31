@@ -12,4 +12,7 @@ std::unique_ptr<VideoProcessor> getVideoProcessor(
     const int cam_index, const cv::Rect& queue_box = kDefaultQueueBox);
 
 std::unique_ptr<VideoProcessor> getVideoProcessor();
+
+std::unique_ptr<VideoProcessor> getVideoProcessor(std::string& model_file_path);
+
 #endif  // QUEUE_ANALYSER_INCLUDE_VIDEO_PROCESSORS_H_

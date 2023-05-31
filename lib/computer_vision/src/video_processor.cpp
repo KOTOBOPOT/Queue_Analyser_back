@@ -11,6 +11,14 @@ VideoProcessor::VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
                                const cv::Rect queue_box) {
   queueVidSource queue_vid_source = queueVidSource(vid_source, queue_box);
   queue_video_sources_.push_back(queue_vid_source);
+  *pic_processor_ = CVPicProcessor();
+}
+
+VideoProcessor::VideoProcessor() {
+  *pic_processor_ = CVPicProcessor();
+}
+VideoProcessor::VideoProcessor(const std::string& model_file_path){
+  *pic_processor_ = CVPicProcessor(model_file_path);
 }
 
 void VideoProcessor::setVisualizeVidSourceIndex(int vid_source_index) {
@@ -32,7 +40,7 @@ std::vector<cv::Rect> VideoProcessor::getPeopleBoxes() {
   std::vector<cv::Rect> people_boxes;
   int people_count = 0;
 
-  pic_processor_.getBoxes(frame_, cv_model_output);
+  pic_processor_->getBoxes(frame_, cv_model_output);
 
   int detections = cv_model_output.size();
 
@@ -113,10 +121,10 @@ bool VideoProcessor::isPersonInBox(const cv::Rect& person_box,
                                          person_box_y + person_box_height);
   cv::Point center_point = cv::Point(person_box_x + person_box_width / 2,
                                      person_box_y + person_box_height / 2);
-  cv::Point left_middle_point = cv::Point(person_box_x,
-                                          person_box_y + person_box_height / 2);
-  cv::Point right_middle_point = cv::Point(person_box_x + person_box_width,
-                                          person_box_y + person_box_height / 2);
+  cv::Point left_middle_point =
+      cv::Point(person_box_x, person_box_y + person_box_height / 2);
+  cv::Point right_middle_point = cv::Point(
+      person_box_x + person_box_width, person_box_y + person_box_height / 2);
 
   bool contains_at_least_one_point = queue_box.contains(left_up_point);
   contains_at_least_one_point =

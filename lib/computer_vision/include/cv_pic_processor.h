@@ -20,6 +20,8 @@ struct Detection {
 class CVPicProcessor {
  public:
   CVPicProcessor();
+  CVPicProcessor(const std::string &model_file_path)
+      : model_file_path_(model_file_path) {}
   void getBoxes(cv::Mat &image, std::vector<Detection> &output);
 
  private:
@@ -30,6 +32,7 @@ class CVPicProcessor {
   std::vector<std::string> loadClassList();
 
  private:
+  std::string model_file_path_ = "/app/static/model";
   cv::dnn::Net net_;
   std::vector<std::string> class_list_;
   bool is_cuda_ = false;

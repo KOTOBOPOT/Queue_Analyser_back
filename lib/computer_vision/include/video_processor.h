@@ -26,10 +26,11 @@ class queueVidSource {
 };
 class VideoProcessor {
  public:
-  //  VideoProcessor(std::vector<queueVidSource> vid_sources);
-  VideoProcessor(){};
+  
+  VideoProcessor();
   VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
                  cv::Rect queue_box = kDefaultQueueBox);
+  VideoProcessor(const std::string& model_file_path);
   void pushBackVideoSource(std::shared_ptr<IVideoSource> vid_source,
                            cv::Rect queue_box = kDefaultQueueBox);
   std::vector<int> getQueuePeopleAmount();
@@ -50,9 +51,9 @@ class VideoProcessor {
   cv::Rect
       queue_box_;  // If person get into this box, person counts as in queue
  private:
-  CVPicProcessor pic_processor_ = CVPicProcessor();
   bool is_cuda_ = false;
   int visualize_vid_source_index_ = -1;  // means no visualize
+  CVPicProcessor* pic_processor_;
 };
 
 #endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_VIDEO_PROCESSOR_H_

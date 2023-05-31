@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
       // auto vid_processor =
       //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
 
-      auto vid_processor = getVideoProcessor();
+      auto vid_processor = getVideoProcessor(DOC_ROOT+"/static/model");
 
       auto fv1 = std::make_shared<FileVideo>(
           DOC_ROOT + "/static/video_examples/ex1.mp4", 0.5);
