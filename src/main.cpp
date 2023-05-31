@@ -20,7 +20,8 @@ int main(int argc, char* argv[]) {
 
     vid_processor->pushBackVideoSource(fv1);
     vid_processor->pushBackVideoSource(fv2, cv::Rect(10, 50, 500, 500));
-
+    vid_processor->pushBackVideoSource(fv3);
+    
     if (argc > 1) {
       int visualizeIndex = std::stoi(argv[1]);
       vid_processor->setVisualizeVidSourceIndex(visualizeIndex);

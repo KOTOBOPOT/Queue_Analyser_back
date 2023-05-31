@@ -53,7 +53,7 @@ class VideoProcessor {
  private:
   bool is_cuda_ = false;
   int visualize_vid_source_index_ = -1;  // means no visualize
-  CVPicProcessor* pic_processor_;
+  std::shared_ptr<CVPicProcessor> pic_processor_;
 };
 
 #endif  // QUEUE_ANALYSER_LIB_COMPUTER_VISION_INCLUDE_VIDEO_PROCESSOR_H_

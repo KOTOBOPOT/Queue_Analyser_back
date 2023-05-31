@@ -11,14 +11,14 @@ VideoProcessor::VideoProcessor(std::shared_ptr<IVideoSource> vid_source,
                                const cv::Rect queue_box) {
   queueVidSource queue_vid_source = queueVidSource(vid_source, queue_box);
   queue_video_sources_.push_back(queue_vid_source);
-  *pic_processor_ = CVPicProcessor();
+  pic_processor_ = std::make_shared<CVPicProcessor>();
 }
 
 VideoProcessor::VideoProcessor() {
-  *pic_processor_ = CVPicProcessor();
+  pic_processor_ = std::make_shared<CVPicProcessor>();
 }
-VideoProcessor::VideoProcessor(const std::string& model_file_path){
-  *pic_processor_ = CVPicProcessor(model_file_path);
+VideoProcessor::VideoProcessor(const std::string& model_file_path) {
+  pic_processor_ = std::make_shared<CVPicProcessor>(model_file_path);
 }
 
 void VideoProcessor::setVisualizeVidSourceIndex(int vid_source_index) {
@@ -73,7 +73,6 @@ VideoProcessor::getQueuePeopleAmount() {  // if video had ended returns -1
       people_amount_vec.push_back(-1);
       continue;
     }
-
     std::vector<cv::Rect> people_boxes = getPeopleBoxes();
 
     int people_amount = people_boxes.size();
