@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     auto vid_processor = getVideoProcessor(DOC_ROOT + "/static/model");
 
     auto fv1 = std::make_shared<FileVideo>(
-        DOC_ROOT + "/static/video_examples/ex1.mp4", 1);
+        DOC_ROOT + "/static/video_examples/ex1.mp4", 0.5);
     auto fv2 = std::make_shared<FileVideo>(
         DOC_ROOT + "/static/video_examples/sample.mp4", 1);
     auto fv3 = std::make_shared<FileVideo>(
@@ -32,18 +32,18 @@ int main(int argc, char* argv[]) {
       if (std::string(argv[1]) != "-v") {
         int visualizeIndex = std::stoi(argv[1]);
         vid_processor->setVisualizeVidSourceIndex(visualizeIndex);
-        pause = 1;
+        pause = 0;
       } else {
         auto wc = std::make_shared<CamVideo>(0);
         vid_processor->pushBackVideoSource(wc,cv::Rect(10, 50, 500, 200));
         if (argc > 2) {
           int visualizeIndex = std::stoi(argv[2]);
           vid_processor->setVisualizeVidSourceIndex(visualizeIndex);
-          pause = 1;
+          pause = 0;
         }
       }
     }
-
+    
     std::cout << "Reopen video..." << std::endl;
     std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
     while (((people_amounts[0]) != -1) && (people_amounts[1] != -1)) {
