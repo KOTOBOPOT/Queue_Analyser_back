@@ -25,8 +25,8 @@ int main(int argc, char* argv[]) {
         DOC_ROOT + "/static/video_examples/entrance2.mp4", 1);
     vid_processor->pushBackVideoSource(fv1);
     vid_processor->pushBackVideoSource(fv2, cv::Rect(10, 50, 500, 500));
-    vid_processor->pushBackVideoSource(fv3);
-    vid_processor->pushBackVideoSource(fv4);
+    vid_processor->pushBackVideoSource(fv3,cv::Rect(100, 10, 300, 600));
+    vid_processor->pushBackVideoSource(fv4,cv::Rect(100, 10, 300, 600));
 
     if (argc > 1) {
       if (std::string(argv[1]) != "-v") {
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
         pause = 1;
       } else {
         auto wc = std::make_shared<CamVideo>(0);
-        vid_processor->pushBackVideoSource(wc);
+        vid_processor->pushBackVideoSource(wc,cv::Rect(10, 50, 500, 200));
         if (argc > 2) {
           int visualizeIndex = std::stoi(argv[2]);
           vid_processor->setVisualizeVidSourceIndex(visualizeIndex);

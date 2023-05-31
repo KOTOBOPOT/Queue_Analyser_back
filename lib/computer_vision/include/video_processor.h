@@ -9,7 +9,7 @@
 #include "i_video_source.h"
 
 const cv::Rect kDefaultQueueBox = cv::Rect(
-    100, 0, 650, 250);  //(100,0)-coordinates of left-up box corner. 100 - shift
+    200, 5, 850, 350);  //(100,0)-coordinates of left-up box corner. 100 - shift
 // from left side, 0 - from top, (650,250) - sides
 // sizes. 650 - horizontal, 250 - vertical
 
