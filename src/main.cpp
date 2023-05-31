@@ -1,80 +1,50 @@
 #include <iostream>
-#include <thread>
 #include <vector>
 
 #include "cam_video.h"
+#include "const.h"
 #include "file_video.h"
-#include "routes.h"
-#include "server.h"
+#include "sqlite_handler.h"
 #include "video_processors.h"
 
-const std::string DOC_ROOT = "/app";
-
 int main(int argc, char* argv[]) {
-  auto rt = getRouter();
-  // Создаем первый поток для сервера
-  std::thread server_thread([&rt]() {
-    Server tst(*rt, "0.0.0.0", 8080, DOC_ROOT + "src/views");
-    // http://localhost:8080/getFromDb?start=20230501000000000&end=20230501235900000
-    tst.run();
-  });
+  SQLiteHandler db_handler(DOC_ROOT + "/db/db.db");
+  while (true) {
+    auto vid_processor = getVideoProcessor(DOC_ROOT + "/static/model");
 
-  // Создаем второй поток для цикла while(true)
-  // TODO: Добавить db_handler внутрь video_processor чтобы через него
-  // взаимодействовать с бд. Пока костыльно прокидываю роутер
-  std::thread video_thread([&rt]() {
-    SQLiteHandler db_handler(DOC_ROOT + "/db/db.db");
-    while (true) {
-      // auto vid_processor =
-      //     getVideoProcessor("../static/video_examples/ex1.mp4", 0.1);
+    auto fv1 = std::make_shared<FileVideo>(
+        DOC_ROOT + "/static/video_examples/ex1.mp4", 0.5);
+    auto fv2 = std::make_shared<FileVideo>(
+        DOC_ROOT + "/static/video_examples/sample.mp4", 0.1);
+    auto fv3 = std::make_shared<CamVideo>(0);
 
-      auto vid_processor = getVideoProcessor(DOC_ROOT+"/static/model");
+    vid_processor->pushBackVideoSource(fv1);
+    vid_processor->pushBackVideoSource(fv2, cv::Rect(10, 50, 500, 500));
 
-      auto fv1 = std::make_shared<FileVideo>(
-          DOC_ROOT + "/static/video_examples/ex1.mp4", 0.5);
-      auto fv2 = std::make_shared<FileVideo>(
-          DOC_ROOT + "/static/video_examples/sample.mp4", 0.1);
-      auto fv3 = std::make_shared<CamVideo>(0);
-
-      vid_processor->pushBackVideoSource(
-          fv1);  // Добавляем в видео_процессор источники для видео
-      vid_processor->pushBackVideoSource(
-          fv2, cv::Rect(10, 50, 500,
-                        500));  // можно также указывать прямоугольник очереди
-      vid_processor->pushBackVideoSource(fv3, cv::Rect(10, 50, 500, 500));
-
-      //Убрал визулизацию
-      //vid_processor->setVisualizeVidSourceIndex(
-      //   1);  // какое видео выводим. Указан индекс 2 - индекс в соответствии с
-               // pushBackVideoSource().  В данном случае выводится видео с веб
-               // камеры ноутбука
-
-      std::cout << "Reopen video..." << std::endl;
-      std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
-      while (((people_amounts[0]) != -1) && (people_amounts[1] != -1)) {
-        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::cout << "Current people amount from first videosource: "
-                  << people_amounts[0]
-                  << ". From second videosource: " << people_amounts[1]
-                  << ". From third: " << people_amounts[2]
-                  << std::endl;  // Если видео кончилось, возращает -1
-
-        auto time_now = std::chrono::system_clock::now();
-
-        for (int vid_index = 0; vid_index < people_amounts.size();
-             ++vid_index) {
-          db_handler.insertEntry(people_amounts[vid_index], time_now,
-                                 vid_index);
-        }
-
-        people_amounts = vid_processor->getQueuePeopleAmount();
-      }
+    if (argc > 1) {
+      int visualizeIndex = std::stoi(argv[1]);
+      vid_processor->setVisualizeVidSourceIndex(visualizeIndex);
     }
-  });
 
-  // Дожидаемся окончания работы потоков
-  video_thread.join();
-  server_thread.join();
+    std::cout << "Reopen video..." << std::endl;
+    std::vector<int> people_amounts = vid_processor->getQueuePeopleAmount();
+    while (((people_amounts[0]) != -1) && (people_amounts[1] != -1)) {
+      // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::cout << "Current people amounts: ";
+      for (int i = 0; i < people_amounts.size(); ++i) {
+        std::cout << i << ": " << people_amounts[i] << ", ";
+      };
+      std::cout << std::endl;
+
+      auto time_now = std::chrono::system_clock::now();
+
+      for (int vid_index = 0; vid_index < people_amounts.size(); ++vid_index) {
+        db_handler.insertEntry(people_amounts[vid_index], time_now, vid_index);
+      }
+
+      people_amounts = vid_processor->getQueuePeopleAmount();
+    }
+  }
 
   return 0;
 }

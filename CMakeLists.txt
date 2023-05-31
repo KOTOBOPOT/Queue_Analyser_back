@@ -30,20 +30,27 @@ enable_testing()
 
 add_executable(${PROJECT_NAME}  
                     src/main.cpp 
-                    src/routes.cpp
+                    src/const.cpp
                     src/video_processors.cpp
 )
 
+add_executable(start_server
+                    src/const.cpp
+                    src/routes.cpp
+                    src/server_main.cpp
+)
 
 add_executable(tgBot
+                    src/const.cpp
                     src/tgbot_main.cpp
 )
-target_link_libraries(tgBot tg_bot database_handler)
+
+target_link_libraries(start_server server database_handler ${Boost_LIBRARIES})
+
+target_link_libraries(tgBot tg_bot ${Boost_LIBRARIES})
 
 
 target_link_libraries(${PROJECT_NAME} 
-                        server 
                         computer_vision 
                         database_handler 
-                        ${Boost_LIBRARIES}
 )

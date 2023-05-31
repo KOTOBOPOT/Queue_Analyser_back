@@ -3,12 +3,13 @@
 #include <nlohmann/json.hpp>
 
 #include "bot.h"
+#include "const.h"
 
 int main(int argc, char** argv) {
   std::shared_ptr<QueueBot::SimpleBot> bot;
 
   {
-    std::ifstream token_file("./configs/tg_bot_token.json");
+    std::ifstream token_file(DOC_ROOT + "/configs/tg_bot_token.json");
     if (!token_file.is_open()) {
       std::cerr << "Не найден файл токена для телеграмм бота "
                    "или возникла ошибка при его открытии"
@@ -31,7 +32,7 @@ int main(int argc, char** argv) {
       return 1;
     }
 
-    std::ifstream file("./configs/tg_bot_menu.json");
+    std::ifstream file(DOC_ROOT + "/configs/tg_bot_menu.json");
     if (!token_file.is_open()) {
       std::cerr << "Не найден файл меню для телеграмм бота "
                    "или возникла ошибка при его открытии"
@@ -39,7 +40,7 @@ int main(int argc, char** argv) {
       return 1;
     }
 
-    std::ifstream names_file("./configs/names.json");
+    std::ifstream names_file(DOC_ROOT + "/configs/names.json");
     if (!names_file.is_open()) {
       std::cerr << "Не найден файл имён столовых "
                    "или возникла ошибка при его открытии"
@@ -56,7 +57,7 @@ int main(int argc, char** argv) {
     }
 
     std::shared_ptr<IDataSource> db =
-        std::make_unique<SQLiteHandler>("./db/db.db");
+        std::make_unique<SQLiteHandler>(DOC_ROOT + "/db/db.db");
 
     QueueBot::CreatorChouser chouser;
     chouser += {"simple_tag", std::make_unique<QueueBot::SimpleCreator>()};

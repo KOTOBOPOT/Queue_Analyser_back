@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    devices:
-        - /dev/video0:/dev/video0
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
