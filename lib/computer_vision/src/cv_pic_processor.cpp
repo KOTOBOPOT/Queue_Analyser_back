@@ -5,13 +5,14 @@
 
 #include "../include/computer_vision_exceptions/file_open_exc.h"
 
-CVPicProcessor::CVPicProcessor() {
+CVPicProcessor::CVPicProcessor(const std::string &model_file_path)
+    : model_file_path_(model_file_path) {
   class_list_ = loadClassList();
   loadNet(net_, is_cuda_);
 }
 
 void CVPicProcessor::loadNet(cv::dnn::Net &net, bool is_cuda) {
-  auto result = cv::dnn::readNet("/app/static/model/yolov5s.onnx");
+  auto result = cv::dnn::readNet(model_file_path_ + "/yolov5s.onnx");
   if (is_cuda_) {
     // Attempt to use CUDA
     result.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
@@ -40,6 +41,7 @@ void CVPicProcessor::getBoxes(cv::Mat &image, std::vector<Detection> &output) {
 void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
                             std::vector<Detection> &output,
                             const std::vector<std::string> &className) {
+
   cv::Mat blob;
 
   auto input_image = formatYoloV5(image);
@@ -49,8 +51,8 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
                          true, false);
   net.setInput(blob);
   std::vector<cv::Mat> outputs;
-  net.forward(outputs, net.getUnconnectedOutLayersNames());
 
+  net.forward(outputs, net.getUnconnectedOutLayersNames());
   float x_factor = input_image.cols / kInputWidth;
   float y_factor = input_image.rows / kInputHeight;
 
@@ -106,10 +108,9 @@ void CVPicProcessor::detect(cv::Mat &image, cv::dnn::Net &net,
 
 std::vector<std::string> CVPicProcessor::loadClassList() {
   std::vector<std::string> class_list;
-  std::ifstream ifs("/app/static/model/classes.txt");
+  std::ifstream ifs(model_file_path_ + "/classes.txt");
   if (!ifs) {
-    throw FileOpenException(
-        "Failed to load classes file for detection");
+    throw FileOpenException("Failed to load classes file for detection");
   }
   std::string line;
   while (getline(ifs, line)) {

@@ -5,11 +5,14 @@
 #include "video_processor.h"
 
 std::unique_ptr<VideoProcessor> getVideoProcessor(
-    const std::string& filename, float skip_secs = 0.5,
-    const cv::Rect& queue_box = kDefaultQueueBox);
+    const std::string& filename, float skip_secs,
+    const cv::Rect& queue_box);
 
 std::unique_ptr<VideoProcessor> getVideoProcessor(
     const int cam_index, const cv::Rect& queue_box = kDefaultQueueBox);
 
 std::unique_ptr<VideoProcessor> getVideoProcessor();
+
+std::unique_ptr<VideoProcessor> getVideoProcessor(std::string model_file_path);
+
 #endif  // QUEUE_ANALYSER_INCLUDE_VIDEO_PROCESSORS_H_
