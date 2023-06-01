@@ -1,0 +1,14 @@
+version: '3'
+services:
+  queue_analyser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    # devices:
+    #     - /dev/video0:/dev/video0      
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    command: bash -c "./build/tgBot & ./build/queueAnalyser & ./build/start_server"
